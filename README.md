@@ -13,4 +13,4 @@
   - Check fine (if not returning book on time)
   - Show list of book
   - Borrow books
-  - Give book to the library
+  - Donate book to the library
