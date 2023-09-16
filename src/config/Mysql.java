@@ -7,7 +7,7 @@ public class Mysql {
     private static String connectURL = "jdbc:mysql://localhost:3306/testlibrary";
     public  static Connection connection;
 
-    static {
+    public static void getConnected(){
         try {
             connection = DriverManager.getConnection(connectURL, "root", "cuong12345");
         } catch (SQLException e) {

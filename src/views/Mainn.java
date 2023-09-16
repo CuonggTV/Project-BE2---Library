@@ -8,6 +8,7 @@ import java.sql.Statement;
 
 public class Mainn {
     public static void main(String[] args) throws SQLException {
+        Mysql.getConnected();
         Statement statement = Mysql.connection.createStatement();
         ResultSet resultSet = statement.executeQuery("select * from people");
         while (resultSet.next()) {
