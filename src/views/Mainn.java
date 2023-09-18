@@ -1,5 +1,6 @@
 package views;
 
+import config.BookList;
 import config.Mysql;
 
 import java.sql.ResultSet;
@@ -8,12 +9,9 @@ import java.sql.Statement;
 
 public class Mainn {
     public static void main(String[] args) throws SQLException {
-        Mysql.getConnected();
-        Statement statement = Mysql.connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("select * from people");
-        while (resultSet.next()) {
-            System.out.println(resultSet.getString("firstname"));
-        }
-        Mysql.connection.close();
+
+        BookList books = new BookList();
+//        books.addBook();
+        books.showAllBooksWithTheirStatus();
     }
 }
