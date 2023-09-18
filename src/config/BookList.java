@@ -39,18 +39,30 @@ public class BookList {
         } catch (SQLException e) {}
         return true;
     }
+
+    public void insertIntoReservationTable(String bookName, String author, float borrowedFee, int copiedOwned)
+    {
+        Scanner sc = new Scanner(System.in);
+        String status;
+        try {
+            System.out.println("Input the status of your new book: ");
+            status = sc.nextLine();
+        } catch (Exception e) {}
+        //Continue.....
+    }
+
     public void addBook() {
         Scanner sc = new Scanner(System.in);
         int id, copiesOwned;
         String bookName, author;
         float borrowedFee;
-
+        String status;
 
         do {
             id = OperationHelper.inputInteger("Input ID: ");
             if (!checkUniquenessOfID(id))
             {
-                System.out.println("Cannot input the existed ID! \n Please input a new book's ID again: ");
+                System.out.println("Cannot input the existed book's ID! \nPlease input a new book's ID again: ");
             }
         } while (!checkUniquenessOfID(id));
 
