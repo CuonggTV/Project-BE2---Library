@@ -6,11 +6,17 @@ import java.sql.*;
 //}
 
 public class Mysql {
-    private static Connection connection;
+    public static Connection connection;
+    public static Statement statement;
+
+    public Mysql() throws SQLException {
+    }
+
 
     public static Connection getConnected() {
         try {
             connection = DriverManager.getConnection(DBSettings.connectURL, DBSettings.username,DBSettings.password);
+            statement = Mysql.connection.createStatement();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

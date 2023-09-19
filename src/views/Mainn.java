@@ -1,11 +1,8 @@
 package views;
 
-import config.BookList;
-import config.Mysql;
+import models.BookList;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class Mainn {
     public static void main(String[] args) throws SQLException {

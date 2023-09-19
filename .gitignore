@@ -30,3 +30,4 @@ bin/
 
 ### ignore some file
 src/config/mysql-connector-j-8.1.0.jar
+src/config/DBSettings.java

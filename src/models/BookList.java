@@ -1,12 +1,12 @@
-package config;
+package models;
 
+import config.Mysql;
 import utils.OperationHelper;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -66,8 +66,8 @@ public class BookList {
             }
         } while (!checkUniquenessOfID(id));
 
-        bookName = OperationHelper.inputFromKeyBoard(("Input Name of Book: "));
-        author = OperationHelper.inputFromKeyBoard("Input Name of author: ");
+        bookName = OperationHelper.inputString(("Input Name of Book: "));
+        author = OperationHelper.inputString("Input Name of author: ");
         borrowedFee = OperationHelper.inputFloat("Input borrowed Fee: ");
         copiesOwned = OperationHelper.inputInteger("Input Copied Owned: ");
 
