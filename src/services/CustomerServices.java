@@ -23,12 +23,17 @@ public class CustomerServices implements IService {
         }
         return customer;
     }
-    @Override
+
     public void add(Object o) throws SQLException {
 //        Customer customer = (Customer) o;
 //        String sqlString = 'insert into customer(username,password,firstname,middlename,lastname,phonenumber)
 //        values("","12345","Tran","Van","Cuong","0123456789");';
 //        Mysql.statement.executeQuery(sqlString);
+
+    }
+
+    @Override
+    public void add() throws SQLException {
 
     }
 
