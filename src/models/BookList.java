@@ -138,7 +138,7 @@ public class BookList {
         try {
             Connection connection = Mysql.getConnected();
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT b.bookName, r.status FROM book b JOIN reservation r ON b.id = r.bookID");
+            ResultSet resultSet = statement.executeQuery("SELECT b.bookName FROM book b JOIN reservation r ON b.id = r.bookID");
 
             while (resultSet.next()) {
                 System.out.print(resultSet.getString("bookName") + "\t");

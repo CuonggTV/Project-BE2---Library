@@ -1,6 +1,9 @@
 package views;
 
+import controllers.CustomerController;
+
 public class AdminMenu extends AbstractMenu {
+    private final CustomerController customerController;
     public final static String[] CHOICE_OPTIONS = {
             "Add books.",
             "Delete books",
@@ -10,7 +13,7 @@ public class AdminMenu extends AbstractMenu {
 
     public AdminMenu(String[] choiceOptions) {
         super(choiceOptions);
-        //productController = new ProductController();
+        customerController = new CustomerController();
     }
         @Override
         public void eventHandler(int whichChoice) {

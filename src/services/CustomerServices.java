@@ -6,7 +6,7 @@ import models.Customer;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CustomerServices implements IService {
+public class CustomerServices{
     public Customer getCustomer(String username, String password) throws SQLException {
         String sqlString = "select * from customer where username = "+username+" and password = " +password;
         ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
@@ -24,25 +24,30 @@ public class CustomerServices implements IService {
         return customer;
     }
 
-    public void add(Object o) throws SQLException {
-//        Customer customer = (Customer) o;
-//        String sqlString = 'insert into customer(username,password,firstname,middlename,lastname,phonenumber)
-//        values("","12345","Tran","Van","Cuong","0123456789");';
-//        Mysql.statement.executeQuery(sqlString);
+    public void add(Customer customer) throws SQLException {
+        String sqlString = "insert into customer(username,password,firstname,middlename,lastname,phonenumber) values(\""+
+                customer.getUserName() +"\",\"" +
+                customer.getPassword() +"\",\"" +
+                customer.getFirstName() + "\",\"" +
+                customer.getMiddleName() + "\",\"" +
+                customer.getLastName() + "\",\"" +
+                customer.getPhoneNumber() +"\");";
+
+        Mysql.statement.executeQuery(sqlString);
 
     }
 
-    @Override
+
     public void add() throws SQLException {
 
     }
 
-    @Override
+
     public void read() {
 
     }
 
-    @Override
+
     public void update() {
 
     }

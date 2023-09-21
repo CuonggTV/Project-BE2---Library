@@ -7,8 +7,7 @@ import utils.OperationHelper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CustomerView implements IView{
-    @Override
+public class CustomerView{
     public void showInfo(Object ob) {
         Customer customer = (Customer) ob;
         System.out.println("Username: "+customer.getUserName());
@@ -16,7 +15,7 @@ public class CustomerView implements IView{
         System.out.println("Phonenumber: "+customer.getPhoneNumber());
     }
 
-    @Override
+
     public void showAllInfo() throws SQLException {
         String sqlString = "select * from customer";
         ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
@@ -37,9 +36,8 @@ public class CustomerView implements IView{
         }
     }
 
-    @Override
     //Also use as login
-    public Object inputInfo() throws SQLException {
+    public Customer inputInfo() throws SQLException {
         String username;
         String password;
         String firstName;

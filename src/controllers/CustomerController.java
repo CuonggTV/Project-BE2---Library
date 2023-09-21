@@ -7,26 +7,27 @@ import views.CustomerView;
 import java.sql.SQLException;
 
 public class CustomerController {
-    public CustomerView customerView;
-    public CustomerServices customerServices;
+    public CustomerView view;
+    public CustomerServices services;
 
     public CustomerController() {
     }
     public CustomerController(CustomerServices customerServices) {
-        this.customerServices = customerServices;
+        this.services = customerServices;
     }
     public CustomerController(CustomerView customerView) {
-        this.customerView = customerView;
+        this.view = customerView;
     }
     public CustomerController(CustomerView customerView, CustomerServices customerServices) {
-        this.customerView = customerView;
-        this.customerServices = customerServices;
+        this.view = customerView;
+        this.services = customerServices;
     }
     public void showAllStudent() throws SQLException {
-        this.customerView.showAllInfo();
+        view.showAllInfo();
     }
-    public void login(){
-        //this.
+    public void login() throws SQLException {
+        Customer customer = view.inputInfo();
+
     }
 
 }
