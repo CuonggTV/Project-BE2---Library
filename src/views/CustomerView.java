@@ -7,7 +7,8 @@ import utils.OperationHelper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CustomerView{
+public class CustomerView implements IView{
+    @Override
     public void showInfo(Object ob) {
         Customer customer = (Customer) ob;
         System.out.println("Username: "+customer.getUserName());
@@ -15,29 +16,30 @@ public class CustomerView{
         System.out.println("Phonenumber: "+customer.getPhoneNumber());
     }
 
+//    @Override
+//    public void showAllInfo() throws SQLException {
+//        String sqlString = "select * from customer";
+//        ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
+//
+//        while (resultSet.next()) {
+//
+//            System.out.println("Id: "+resultSet.getString("id"));
+//
+//            System.out.println("Username: "+resultSet.getString("username"));
+//            System.out.println("Name: "+
+//                    resultSet.getString("firstname") +" "+
+//                    resultSet.getString("middlename")+" "+
+//                    resultSet.getString("lastname")
+//            );
+//            System.out.println(resultSet.getString("phonenumber"));
+//
+//            System.out.println();
+//        }
+//    }
 
-    public void showAllInfo() throws SQLException {
-        String sqlString = "select * from customer";
-        ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
-
-        while (resultSet.next()) {
-
-            System.out.println("Id: "+resultSet.getString("id"));
-
-            System.out.println("Username: "+resultSet.getString("username"));
-            System.out.println("Name: "+
-                    resultSet.getString("firstname") +" "+
-                    resultSet.getString("middlename")+" "+
-                    resultSet.getString("lastname")
-            );
-            System.out.println(resultSet.getString("phonenumber"));
-
-            System.out.println();
-        }
-    }
-
+    @Override
     //Also use as login
-    public Customer inputInfo() throws SQLException {
+    public Object inputInfo() throws SQLException {
         String username;
         String password;
         String firstName;

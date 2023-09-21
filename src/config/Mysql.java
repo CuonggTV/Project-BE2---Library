@@ -16,7 +16,6 @@ public class Mysql {
             connection = DriverManager.getConnection(DBSettings.connectURL, DBSettings.username,DBSettings.password);
             statement = Mysql.connection.createStatement();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
         return connection;
     }
