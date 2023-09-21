@@ -22,9 +22,9 @@ public class CustomerController {
         this.customerView = customerView;
         this.customerServices = customerServices;
     }
-    public void showAllStudent() throws SQLException {
-        this.customerView.showAllInfo();
-    }
+//    public void showAllStudent() throws SQLException {
+//        this.customerView.showAllInfo();
+//    }
     public void login(){
         //this.
     }

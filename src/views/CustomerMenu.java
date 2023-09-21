@@ -18,6 +18,8 @@ public class CustomerMenu extends AbstractMenu {
     public void eventHandler(int whichChoice) {
         switch (whichChoice){
             case 1:
+//                BookView bookView = new BookView();
+//                bookView.showBorrowedBook();
                 break;
             case 2:
                 break;
