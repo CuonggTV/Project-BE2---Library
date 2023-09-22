@@ -32,9 +32,8 @@ public class CustomerServices{
                 customer.getMiddleName() + "\",\"" +
                 customer.getLastName() + "\",\"" +
                 customer.getPhoneNumber() +"\");";
-
-        Mysql.statement.executeQuery(sqlString);
-
+        System.out.println(sqlString);
+        Mysql.statement.executeUpdate(sqlString);
     }
 
 

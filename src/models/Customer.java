@@ -13,6 +13,11 @@ public class Customer {
     public Customer() {
     }
 
+    public Customer(int id) {
+        this.id = id;
+    }
+
+
     public Customer(String userName, String password, String firstName, String middleName,String lastName, String phoneNumber) {
         this.userName = userName;
         this.password = password;
