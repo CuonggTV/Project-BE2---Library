@@ -8,44 +8,6 @@ import java.util.Scanner;
 
 public class BookView {
     Scanner sc = new Scanner(System.in);
-//    public void showBorrowedBook() {
-//        String sql = "SELECT l.id, b.bookName, l.loanDate, l.returnDate FROM loan l JOIN book b ON l.bookID = b.id;";
-//        try {
-//            ResultSet resultSet = Mysql.statement.executeQuery(sql);
-//            while (resultSet.next()) {
-//                String id = resultSet.getString("id");
-//                String bookName = resultSet.getString("bookName");
-//                String loanDate = resultSet.getString("loanDate");
-//                String returnDate = resultSet.getString("returnDate");
-//
-//                System.out.printf("%s\t\t\t%s\t\t\t%s\t\t\t%s%n", id, bookName, loanDate, returnDate);
-//            }
-//        } catch (SQLException e) {
-//            // Handle the exception or display an error message
-//            e.printStackTrace();
-//        }
-//    }
-
-//    public void checkOwnFine()
-//    {
-//        String sql = "select f.id as fineID, c.id as customerID, c.firstName, f.amount, f.deadline from fine f join customer c on f.customerID = c.id;";
-//        try {
-//            ResultSet resultSet = Mysql.statement.executeQuery(sql);
-//            System.out.println("fineID\t\t\tcustomerID\t\t\tfirstName\t\t\tamount\t\t\tdeadline" );
-//            while (resultSet.next()) {
-//                String id = resultSet.getString("fineID");
-//                String idC = resultSet.getString("customerID");
-//                String firstName = resultSet.getString("firstName");
-//                String amount = resultSet.getString("amount");
-//                String deadline = resultSet.getString("deadline");
-//
-//                System.out.printf("%s\t\t\t\t\t%s\t\t\t\t%s\t\t\t\t%s\t\t\t%s%n", id, idC, firstName, amount, deadline);
-//            }
-//        } catch (SQLException e) {
-//            // Handle the exception or display an error message
-//            e.printStackTrace();
-//        }
-//    }
 
     public void showAllBooksWithTheirStatus() {
         String sql = "SELECT\n" +
