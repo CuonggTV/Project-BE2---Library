@@ -16,12 +16,13 @@ public class CustomerMenu extends AbstractMenu {
     }
     @Override
     public void eventHandler(int whichChoice) {
+        BookView bookView = new BookView();
         switch (whichChoice){
             case 1:
-//                BookView bookView = new BookView();
-//                bookView.showBorrowedBook();
+
                 break;
             case 2:
+
                 break;
             case 3:
                 break;

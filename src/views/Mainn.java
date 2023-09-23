@@ -10,6 +10,7 @@ public class Mainn {
 
         Mysql.getConnected();
         BookView bookView = new BookView();
-        bookView.showBorrowedBook();
+//        bookView.showBorrowedBook();
+        bookView.deleteBook();
     }
 }
