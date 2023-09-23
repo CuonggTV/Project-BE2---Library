@@ -1,7 +1,6 @@
 package views;
 
 import config.Mysql;
-import models.BookList;
 
 import java.sql.SQLException;
 
@@ -9,8 +8,9 @@ public class Mainn {
     public static void main(String[] args) throws SQLException {
 
         Mysql.getConnected();
-        BookView bookView = new BookView();
+        AdminView bookView = new AdminView();
 //        bookView.showBorrowedBook();
-        bookView.deleteBook();
+        CustomerView customerView = new CustomerView();
+        bookView.showAllCustomerWithReservation();
     }
 }
