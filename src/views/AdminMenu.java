@@ -19,6 +19,7 @@ public class AdminMenu extends AbstractMenu {
         public void eventHandler(int whichChoice) {
             switch (whichChoice){
                 case 1:
+                    AdminView admin = new AdminView();
                     break;
                 case 2:
                     break;

@@ -54,7 +54,7 @@ public class AdminView {
         try {
             Connection connection = Mysql.getConnected();
             Statement statement = connection.createStatement();
-            String query = "INSERT INTO book (id, bookName, author, borrewedFee, copiesOwned) " +
+            String query = "INSERT INTO book (id, bookName, author, borrowedFee, copiesOwned) " +
                     "VALUES (" + id + ", '" + bookName + "', '" + author + "', " + borrowedFee + ", " + copiesOwned + ")";
             statement.executeUpdate(query);
             connection.close();
@@ -119,7 +119,7 @@ public class AdminView {
                 System.out.print("ID: " + resultSet.getString("id") + "\t");
                 System.out.println("Name of book: " + resultSet.getString("bookName"));
                 System.out.print("Author: " + resultSet.getString("author") + "\t\t\t");
-                System.out.print("Borrowed Fee: " + resultSet.getString("borrewedFee") + "\t\t\t\n");
+                System.out.print("Borrowed Fee: " + resultSet.getString("borrowedFee") + "\t\t\t\n");
                 System.out.println("Copies Owned: " + resultSet.getString("copiesOwned"));
                 System.out.println("+------------------------------------------------------------------+\n");
             }
@@ -152,6 +152,17 @@ public class AdminView {
         {
             e.printStackTrace();
         }
+        int choice = 0;
+        System.out.println("Do you want to see more detail?\n1. Yes\n2.No");
+        choice = OperationHelper.inputIntegerWithRange("Input your choice: ", 1, 2);
+        switch (choice)
+        {
+            case 1:
+                showDetail();
+                break;
+            case 2:
+                break;
+        }
     }
 
     //show customer with fine
@@ -177,14 +188,14 @@ public class AdminView {
     public void showAllCustomerWithLoan()
     {
         int i = 0;
-        String sql = "select c.firstName, c.middleName, c.lastName, c.phoneNumber, l.amountOfBook, l.loanDate, l.returnDate, l.payment from customer c join loan l on c.id = l.customerID";
+        String sql = "select c.firstName, c.middleName, c.lastName, c.phoneNumber, l.loanDate, l.returnDate from customer c join loan l on c.id = l.customerID";
         try {
             ResultSet resultSet = Mysql.statement.executeQuery(sql);
             while (resultSet.next()) {
                 System.out.println(++i + "/");
                 System.out.println("+---------------------------------------------------------------------------------------------------------------+");
-                System.out.println("Customer: " + resultSet.getString("firstName") + " " + resultSet.getString("middleName") + " " + resultSet.getString("lastName") + "\t\t_Phone Number: " + resultSet.getString("phoneNumber"));
-                System.out.println("Amount Of Book: " + resultSet.getString("amountOfBook") + "  \t_Loan Date: " + resultSet.getString("loanDate") + " \t\t_Return Date: " + resultSet.getString("returnDate") + " \t_Payment: " + resultSet.getString("payment"));
+                System.out.println("_Customer: " + resultSet.getString("firstName") + " " + resultSet.getString("middleName") + " " + resultSet.getString("lastName") + "\t\t_Phone Number: " + resultSet.getString("phoneNumber"));
+                System.out.println("_Loan Date: " + resultSet.getString("loanDate") + " \t\t_Return Date: " + resultSet.getString("returnDate"));
                 System.out.println("+---------------------------------------------------------------------------------------------------------------+\n");
             }
         } catch (SQLException e)
@@ -256,6 +267,32 @@ public class AdminView {
         }
     }
 
+    private void showDetail()
+    {
+        String sql = "SELECT t.firstName as firstName, GROUP_CONCAT(t.bookName SEPARATOR '\\n') AS books\n" +
+                "FROM (\n" +
+                "    SELECT customer.firstName, book.bookName\n" +
+                "    FROM loan\n" +
+                "    INNER JOIN customer ON loan.customerID = customer.id\n" +
+                "    INNER JOIN book ON loan.bookID = book.id\n" +
+                "    ORDER BY customer.firstName\n" +
+                ") t\n" +
+                "GROUP BY t.firstName;";
+        try {
+            ResultSet rs = Mysql.statement.executeQuery(sql);
+            while (rs.next()) {
+                String customerName = rs.getString("firstName");
+                String books = rs.getString("books");
+
+                // Hiển thị thông tin khách hàng và sách
+                System.out.println("Customer Name: " + customerName);
+                System.out.println("Books: \n" + books);
+                System.out.println("-----------------------------");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

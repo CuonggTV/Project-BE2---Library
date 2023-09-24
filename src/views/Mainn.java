@@ -11,6 +11,6 @@ public class Mainn {
         AdminView bookView = new AdminView();
 //        bookView.showBorrowedBook();
         CustomerView customerView = new CustomerView();
-        bookView.showAllCustomerWithReservation();
+        bookView.showAllCustomerAndTheirStatus();
     }
 }
