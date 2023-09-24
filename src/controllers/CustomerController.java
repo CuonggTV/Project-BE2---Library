@@ -3,6 +3,7 @@ package controllers;
 import models.Customer;
 import services.CustomerServices;
 import utils.OperationHelper;
+import views.AdminView;
 import views.CustomerView;
 
 import java.sql.SQLException;
@@ -89,7 +90,7 @@ public class CustomerController {
 
 
     public void chooseBookAndBorrow(int customerID) throws SQLException {
-        String []choice = view.inputChoice("Enter categories you want to see or none: ");
+        String []choice = view.inputChoice("Enter bookID you want to borrow or none: ");
         if(OperationHelper.isArrayOfInteger(choice)){
             if (!choice[0].equals( "none")){
 
@@ -98,7 +99,7 @@ public class CustomerController {
                 for (String value : choice) {
                     int bookID = Integer.parseInt(value);
                     if (services.checkBook(bookID)) {
-                        totalMoney += services.getBorrowedFee(bookID);
+                        totalMoney += CustomerServices.getBorrowedFee(bookID);
                     } else return;
                 }
 
@@ -145,7 +146,9 @@ public class CustomerController {
             chooseBookAndBorrow(id);
         }
         else if(choice[0].equals("none")){
-
+            AdminView adminView = new AdminView();
+            adminView.showInfoOfAllBooks();
+            chooseBookAndBorrow(id);
         }
 
     }
