@@ -96,7 +96,7 @@ public class CustomerServices{
 
     public static void getCategories(List<String> categories) throws SQLException {
         String sqlString = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS " +
-                "WHERE TABLE_NAME = 'bookcategories' and table_schema = 'librarydb' order by ORDINAL_POSITION;";
+                "WHERE TABLE_NAME = 'bookcategories' and table_schema = 'testlibrary' order by ORDINAL_POSITION;";
         ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
 
         while(resultSet.next()){
