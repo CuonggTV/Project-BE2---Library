@@ -192,8 +192,8 @@ public class CustomerView implements IView{
     }
 
     public void showReservation(int id) throws SQLException {
-        String sql = "SELECT book.bookName,rs.dateCreated,rs.status from reservation as rs, book" +
-                "where customerID = " +id +" and book.id = rs.bookID;" ;
+        String sql = "SELECT book.bookName, rs.dateCreated, rs.status from reservation as rs, book " +
+                "where rs.customerID = " +id +" and book.id = rs.bookID;" ;
         ResultSet resultSet = Mysql.statement.executeQuery(sql);
 
         while (resultSet.next()) {
