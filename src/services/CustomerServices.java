@@ -231,7 +231,7 @@ public class CustomerServices{
 
     public static void checkAndCreateFine() throws SQLException {
         String sqlString = "select loan.id, loan.customerID, book.borrowedFee from loan, book " +
-                "where curdate() > loan.returnDate and status = 0 " +
+                "where curdate() > loan.returnDate and loan.status = 0 " +
                 "and loan.bookID = book.id";
         ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
 
