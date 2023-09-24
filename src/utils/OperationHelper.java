@@ -45,11 +45,11 @@ public class OperationHelper {
         } while (true);
     }
 
-    public static boolean isNumeric(String num, String mess){
+    public static boolean isNumeric(String num, String errmess){
         try {
             Integer.parseInt(num);
         } catch (NumberFormatException e) {
-            System.out.println(mess);
+            System.out.println(errmess);
             return false;
         }
         return true;

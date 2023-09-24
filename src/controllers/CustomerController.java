@@ -60,7 +60,7 @@ public class CustomerController {
         view.showOwnFine(id);
         String choice[] = view.inputChoice("Enter your choice to pay: ");
         if(OperationHelper.isArrayOfInteger(choice)){
-            if(!choice[0].equals( "none")){
+            if(!choice[0].equals("none")){
                 for(int i =0;i<choice.length;i++){
 
                 }

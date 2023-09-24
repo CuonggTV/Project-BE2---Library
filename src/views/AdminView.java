@@ -101,9 +101,16 @@ public class AdminView {
     {
         showInfoOfAllBooks();
         int id = 0;
+        String input;
         do {
             System.out.println("Input the ID of the book you want to delete which MUST BE in list : ");
-            id = sc.nextInt();
+            input = OperationHelper.inputString("Input the ID of the book you want to delete which MUST BE in list : ");
+            if (OperationHelper.isNumeric(input,"Must be a number or none.")){
+                id = Integer.parseInt(input);
+            }
+            else if(input.equals("none")){
+                return;
+            }
         } while(checkUniquenessOfID(id));
         delete(id);
     }
