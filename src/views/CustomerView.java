@@ -79,7 +79,10 @@ public class CustomerView implements IView{
         while (true){
             phoneNumber = OperationHelper.inputString("Enter your phoneNumber: ");
 
-            if (phoneNumber.length()!=10 || OperationHelper.isNumeric(phoneNumber,"")){
+            if(phoneNumber.length()==10) {
+                break;
+            }
+            else if (OperationHelper.isNumeric(phoneNumber,"")){
                 System.out.println("Phone number must have 10 number");
                 continue;
             }

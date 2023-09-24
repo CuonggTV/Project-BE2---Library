@@ -157,7 +157,7 @@ public class CustomerController {
         {
             switch (view.showUpdateInfoMenu()){
                 case 1 -> {
-                    services.updateUsername(id,view.inputPhoneNumber());
+                    services.updateUsername(id,view.inputUsername());
                 }
                 case 2 -> {
                     services.updatePassword(id,OperationHelper.inputString("Enter new password"));
