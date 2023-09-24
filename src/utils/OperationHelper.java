@@ -18,12 +18,23 @@ public class OperationHelper {
         } while (true);
     }
 
-    public static int inputInteger(String message)
-    {
-        System.out.println(message);
+    public static int inputInteger(String message) {
+        int value;
         Scanner sc = new Scanner(System.in);
+        do{
+            System.out.println(message);
+            try{
+                value = Integer.parseInt(sc.nextLine());
+            }
+            catch (NumberFormatException e){
+                System.out.println("Value must be a number");
+                continue;
+            }
+            break;
+        }while (true);
 
-        return sc.nextInt();
+
+        return value;
     }
 
     public static Integer inputIntegerWithRange(String message, int min, int max) {
@@ -75,7 +86,10 @@ public class OperationHelper {
             try {
                 Integer.parseInt(s);
             } catch (NumberFormatException e) {
-                System.out.println("Wrong input.");
+                if(!arr[0].equals("none")){
+                    System.out.println("Wrong input.");
+                }
+
                 return false;
             }
         }
@@ -88,5 +102,4 @@ public class OperationHelper {
         return format1.format(ldt);
     }
 
-//    public void formatName()
 }

@@ -1,13 +1,10 @@
 package controllers;
 
-import config.Mysql;
-import jdk.jfr.Category;
 import models.Customer;
 import services.CustomerServices;
 import utils.OperationHelper;
 import views.CustomerView;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +34,7 @@ public class CustomerController {
 //    }
 
     public int login() throws SQLException {
-        int choice =1;
+        int choice;
         do {
             int id = view.login();
             if(id>0){
@@ -53,25 +50,45 @@ public class CustomerController {
         services.add(customer);
     }
 
-    public void showBorrowedBooks(int id) throws SQLException {
-       view.showBorrowedBooks(id);
-    }
-    public void payFineOwnFine(int id) throws SQLException {
+    public void payFine(int id) throws SQLException {
         view.showOwnFine(id);
-        String choice[] = view.inputChoice("Enter your choice to pay: ");
+        String[] choice = view.inputChoice("Enter your loanID to pay: ");
         if(OperationHelper.isArrayOfInteger(choice)){
-            if(!choice[0].equals("none")){
                 for(int i =0;i<choice.length;i++){
+                    int loanID = Integer.parseInt(choice[0]);
+                    if(CustomerServices.checkFine(loanID)) {
+                        if(!services.subtractBalance(id,services.getFineAmount(id,loanID))){
+                            System.out.println("Your account does not have enough money.");
+                            return;
+                        }
+                        if(services.deleteFine(id,loanID)){
+                            System.out.println("Fine with loanID("+ loanID +") has been paid!");
+                        }
+                        else System.out.println("Fine with loanID("+ loanID +") does not exist!");
 
+                    }
                 }
             }
 
-            return;
-        }
-        System.out.println("Wrong input");
     }
 
-    public void chooseBookAndBorrow(int custmerID) throws SQLException {
+    public void payLoan(int id) throws SQLException {
+        view.showBorrowedBooks(id);
+        String[] choice = view.inputChoice("Enter your loanID to return book: ");
+        if(OperationHelper.isArrayOfInteger(choice)){
+                for(int i =0;i<choice.length;i++){
+                    int loanID = Integer.parseInt(choice[0]);
+                    if(services.checkLoan(loanID)) {
+                        services.disableLoan(id,loanID);
+                        System.out.println("LoanID: "+ loanID +" has been paid!");
+                    }
+                }
+
+        }
+    }
+
+
+    public void chooseBookAndBorrow(int customerID) throws SQLException {
         String []choice = view.inputChoice("Enter categories you want to see or none: ");
         if(OperationHelper.isArrayOfInteger(choice)){
             if (!choice[0].equals( "none")){
@@ -89,7 +106,7 @@ public class CustomerController {
                 view.showResultBorrowBook(totalMoney);
 
                 // Khi customer ko con tien
-                if(!services.subtractBalance(custmerID,totalMoney)){
+                if(!services.subtractBalance(customerID,totalMoney)){
                     System.out.println("Not enough money!");
                 }
 
@@ -97,12 +114,12 @@ public class CustomerController {
                     int bookID= Integer.parseInt(s);
                     //Khi library het book
                     if(!services.subtractCopiesOwned(bookID)){
-                        if(view.showNotEnoughCopies(services.getBookName(bookID))){
-                            services.createReservation(custmerID,bookID);
+                        if(view.showNotEnoughCopies(CustomerServices.getBookName(bookID))){
+                            services.createReservation(customerID,bookID);
                         }
                         else return;
                     }
-                    else services.createLoan(custmerID, bookID);
+                    else services.createLoan(customerID, bookID);
                 }
                 System.out.println("Successfully borrowed!");
             }
@@ -113,10 +130,10 @@ public class CustomerController {
 
     public void borrowBook(int id) throws SQLException {
         List<String> categories = new ArrayList<>();
-        services.getCategories(categories);
+        CustomerServices.getCategories(categories);
         view.showCategories(categories);
 
-        String []choice = view.inputChoice("Enter bookID you want to borrow or none:");
+        String []choice = view.inputChoice("Enter categories you want to see or none:");
         if(OperationHelper.isArrayOfInteger(choice)){
             for(int i=0;i<choice.length;i++){
                 System.out.println(i+". choice: "+ choice[i]);
@@ -127,9 +144,15 @@ public class CustomerController {
             view.showBookByCategories(sql);
             chooseBookAndBorrow(id);
         }
+        else if(choice[0].equals("none")){
+
+        }
 
     }
+
+
     public void updateInformation(int id) throws SQLException {
+        view.showAllInfo(id);
         while (true)
         {
             switch (view.showUpdateInfoMenu()){
@@ -148,7 +171,9 @@ public class CustomerController {
                     services.updatePhoneNumber(id,view.inputPhoneNumber());
                 }
                 case 5-> {
+                    //view.showBalace(id)
                     services.addBalance(id,OperationHelper.inputFloat("Enter balance: "));
+                    System.out.println("Add successful.");
                 }
                 case 6 ->{
                     return;
@@ -156,6 +181,10 @@ public class CustomerController {
             }
         }
 
+    }
+
+    public void showReservation(int id) throws SQLException {
+        view.showReservation(id);
     }
 
 

@@ -18,12 +18,12 @@ public class CustomerView implements IView{
         System.out.println("Phonenumber: "+customer.getPhoneNumber());
     }
 
-    public void showAllInfo() throws SQLException {
-        String sqlString = "select * from customer";
+    public void showAllInfo(int id) throws SQLException {
+        String sqlString = "select * from customer where id = " + id;
         ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
 
         while (resultSet.next()) {
-
+            System.out.println("----------------------------------------------------------");
             System.out.println("Id: "+resultSet.getString("id"));
 
             System.out.println("Username: "+resultSet.getString("username"));
@@ -32,9 +32,9 @@ public class CustomerView implements IView{
                     resultSet.getString("middlename")+" "+
                     resultSet.getString("lastname")
             );
-            System.out.println(resultSet.getString("phonenumber"));
-
-            System.out.println();
+            System.out.println("Phone number: " +resultSet.getString("phonenumber"));
+            System.out.println("Balance" + resultSet.getString("balance"));
+            System.out.println("----------------------------------------------------------");
         }
     }
 
@@ -104,22 +104,24 @@ public class CustomerView implements IView{
     }
 
     public void showBorrowedBooks(int customerID) throws SQLException {
-        String sqlString = "select book.bookName, book.author, loan.returnDate " +
+        String sqlString = "select loan.id, book.bookName, book.author, loan.returnDate " +
                 "from book, loan " +
-                "where loan.bookID = book.id And loan.customerID = " +customerID;
+                "where loan.bookID = book.id And loan.customerID = " +customerID +
+                " and status = 0";
         ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
 
         while(resultSet.next()){
             System.out.println("-----------------------------------------------------------------");
-            System.out.println("Book: \""+resultSet.getString("bookName")
+            System.out.println("(LoanID: " +resultSet.getInt("loan.id") );
+            System.out.println("    Book: \""+resultSet.getString("bookName")
                     +"\" written by: " + resultSet.getString("author") );
-            System.out.println("Return date" + resultSet.getString("returnDate"));
+            System.out.println("    Return date" + resultSet.getString("returnDate"));
             System.out.println("-----------------------------------------------------------------\n");
         }
     }
 
     public void showOwnFine(int customerID) throws SQLException {
-        String sqlString = "select fine.id, book.bookName, fine.amount, fine.deadline " +
+        String sqlString = "select fine.loanID, book.bookName, fine.amount, fine.deadline " +
                 "from fine " +
                 "INNER JOIN loan on fine.loanID = loan.id " +
                 "INNER JOIN book on loan.bookID = book.id " +
@@ -129,7 +131,7 @@ public class CustomerView implements IView{
 
         while(resultSet.next()){
             System.out.println("-----------------------------------------------------------------");
-            System.out.print(resultSet.getInt("id")+". ");
+            System.out.print(resultSet.getInt("loanID")+". ");
             System.out.println("Fine from returning \""+resultSet.getString("bookName") + "\" late");
             System.out.println("    Need to pay: " + resultSet.getString("amount") + " $");
             System.out.println("    Deadline: " + resultSet.getString("deadline"));
@@ -138,7 +140,6 @@ public class CustomerView implements IView{
     }
 
     public void showCategories(List<String> categories){
-
         for(int i= 1;i<categories.size();i++){
             System.out.println(i+". "+categories.get(i));
         }
@@ -185,6 +186,23 @@ public class CustomerView implements IView{
         System.out.println("5. Add balance.");
         System.out.println("6. Out.");
         return OperationHelper.inputIntegerWithRange("Your choice: ",1,6);
+    }
+
+    public void showReservation(int id) throws SQLException {
+        String sql = "SELECT book.bookName,rs.dateCreated,rs.status from reservation as rs, book" +
+                "where customerID = " +id +" and book.id = rs.bookID;" ;
+        ResultSet resultSet = Mysql.statement.executeQuery(sql);
+
+        while (resultSet.next()) {
+            System.out.println("----------------------------------------------------------");
+            System.out.println("Book name: "+resultSet.getString("bookName"));
+            System.out.println("Date created: " +resultSet.getString("dateCreated"));
+            if(resultSet.getBoolean("status")){
+                System.out.println("Status: is in the library");
+            }
+            else System.out.println("Status: still not in library");
+            System.out.println("----------------------------------------------------------");
+        }
     }
 
 

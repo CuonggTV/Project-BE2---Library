@@ -2,6 +2,8 @@ package views;
 
 import controllers.CustomerController;
 
+import java.sql.SQLException;
+
 public class AdminMenu extends AbstractMenu {
     private final AdminView adminView;
     public final static String[] CHOICE_OPTIONS = {
@@ -11,7 +13,10 @@ public class AdminMenu extends AbstractMenu {
             "Show all customers and their status(borrowed or not).",
             "Show customers with fines",
             "Show customers with reservation",
-            "Show customers with amount of book"
+            "Show customers with amount of book",
+            "Add new category",
+            "Update category name",
+            "Add categories to book"
     };
 
     public AdminMenu(String[] choiceOptions) {
@@ -19,7 +24,7 @@ public class AdminMenu extends AbstractMenu {
         adminView = new AdminView();
     }
         @Override
-        public void eventHandler(int whichChoice) {
+        public void eventHandler(int whichChoice) throws SQLException {
             switch (whichChoice){
                 case 1:
                     adminView.addBook();
@@ -41,6 +46,15 @@ public class AdminMenu extends AbstractMenu {
                     break;
                 case 7:
                     adminView.addBookAmount();
+                    break;
+                case 8:
+                    adminView.addCategory();
+                    break;
+                case 9:
+                    adminView.updateCategoryName();
+                    break;
+                case 10:
+                    adminView.addBookCategories();
                     break;
             }
         }

@@ -9,8 +9,9 @@ public class CustomerMenu extends AbstractMenu {
     private final CustomerController customerController;
     public final static String[] CHOICE_OPTIONS = {
             "Update information.",
-            "Check borrowed books.",
-            "Check own fines.",
+            "Show borrowed books and return them.",
+            "Show own fines and pay them.",
+            "Show reservation.",
             "Borrow books."
     };
 
@@ -34,14 +35,16 @@ public class CustomerMenu extends AbstractMenu {
             case 1:
                 customerController.updateInformation(id);
                 break;
-
             case 2:
-                customerController.showBorrowedBooks(id);
+                customerController.payLoan(id);
                 break;
             case 3:
-//                customerController.showOwnFine(id);
+                customerController.payFine(id);
                 break;
             case 4:
+                customerController.showReservation(id);
+                break;
+            case 5:
                 customerController.borrowBook(id);
                 break;
         }

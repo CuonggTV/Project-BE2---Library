@@ -1,9 +1,12 @@
 package views;
 
 import config.Mysql;
+import services.CustomerServices;
 import utils.OperationHelper;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class AdminView {
@@ -232,8 +235,7 @@ public class AdminView {
 
     public void addBookAmount() {
         showInfoOfAllBooks();
-        System.out.println("Input the ID of the book that you want to add its amount: ");
-        int id = sc.nextInt();
+        int id = OperationHelper.inputInteger("Input the ID of the book that you want to add its amount: ");
         String sql = "SELECT copiesOwned, bookName FROM book WHERE id = " + id;
         try {
             ResultSet resultSet3 = Mysql.statement.executeQuery(sql);
@@ -244,6 +246,7 @@ public class AdminView {
                 System.out.println("Current amount of book with ID " + id + " is " + copiesOwned);
                 AmountOfBook(id, copiesOwned, bookName);
                 System.out.println("+---------------------------------------------------------------------------------------------------------------+\n");
+                addBookTrigger(id);
             } else {
                 System.out.println("Book with ID " + id + " does not exist.");
             }
@@ -252,13 +255,16 @@ public class AdminView {
         }
     }
 
+    public void addBookTrigger(int id) throws SQLException {
+        String sql = "Update reservation set status = 1 where id = "+id;
+        Mysql.statement.executeUpdate(sql);
+    }
     private void AmountOfBook(int id, int currentCopiesOwned, String bookName) {
 
         int amountOfBook = 0;
         try {
             do {
-                System.out.println("Input the amount of book you want to add: ");
-                amountOfBook = sc.nextInt();
+                amountOfBook = OperationHelper.inputInteger("Input the amount of book you want to add: ");
             } while (amountOfBook < 0);
             int newCopiesOwned = currentCopiesOwned + amountOfBook;
             String updateSql = "UPDATE book SET copiesOwned = " + newCopiesOwned + " WHERE id = " + id;
@@ -300,6 +306,112 @@ public class AdminView {
             e.printStackTrace();
         }
     }
+
+    public void addCategory() throws SQLException {
+        String name = null;
+        boolean notLoop;
+        List<String> categories = new ArrayList<>();
+        CustomerServices.getCategories(categories);
+
+       do{
+            notLoop = true;
+            name = OperationHelper.inputString("Enter category's name: ");
+            for(String x: categories){
+                if(name.equals(x)){
+                    System.out.println("This category is already existed.");
+                    notLoop = false;
+                }
+            }
+        }while(!notLoop);
+
+       String sqlString = "Alter table bookcategories add column `"+name+"` bit not null";
+       Mysql.statement.executeUpdate(sqlString);
+    }
+
+    public void updateCategoryName() throws SQLException {
+
+        CustomerView view = new CustomerView();
+        List<String> categories = new ArrayList<>();
+        CustomerServices.getCategories(categories);
+        view.showCategories(categories);
+        String oldName = null;
+        String name =null;
+        boolean notLoop;
+        do{
+            notLoop = false;
+            oldName = OperationHelper.inputString("Enter old category name: ");
+            for(String x: categories){
+                if (oldName.equals(x)) {
+                    notLoop = true;
+                    break;
+                }
+            }
+        }while(!notLoop);
+
+
+        do{
+            notLoop = true;
+            name = OperationHelper.inputString("Enter new category name: ");
+            for(String x: categories){
+                if(name.equals(x)){
+                    System.out.println("This category is already existed.");
+                    notLoop = false;
+                }
+            }
+        }while(!notLoop);
+
+        String sqlString = "ALTER TABLE bookcategories " +
+                "RENAME COLUMN " + oldName +" TO " +name;
+        Mysql.statement.executeUpdate(sqlString);
+    }
+
+    public String turnChoicesToSQL(String choice[], List<String> categories, int bookID){
+        StringBuilder sqlString = new StringBuilder("Update bookcategories set  ");
+
+
+        for(int i =0;i<choice.length;i++){
+            try {
+                sqlString.append("`").append(categories.get(Integer.parseInt(choice[i]))).append("` = 1 ");
+            }
+            catch (Exception e){
+                System.out.println("This is not in categories");
+                return null;
+            }
+            if (i!= choice.length-1){
+                sqlString.append(", ");
+            }
+        }
+        sqlString.append(" where bookID = ").append(bookID);
+        return sqlString.toString();
+    }
+    public void addBookCategories() throws SQLException {
+        //Show book
+        showInfoOfAllBooks();
+        int bookID;
+        do{
+            bookID = OperationHelper.inputInteger("Enter bookID to add: ");
+            if(CustomerServices.getBookName(bookID)==null){
+                System.out.println("This bookID is not exist.");
+                continue;
+            }
+            break;
+        }while(true);
+
+
+        CustomerView view = new CustomerView();
+        List<String> categories = new ArrayList<>();
+        CustomerServices.getCategories(categories);
+        view.showCategories(categories);
+
+        String []choice = view.inputChoice("Enter category you want to add or none:");
+        if(OperationHelper.isArrayOfInteger(choice)){
+            String sql = turnChoicesToSQL(choice,categories,bookID);
+            if(sql == null) return;
+            Mysql.statement.executeUpdate(sql);
+        }
+    }
+
+
 
 
 }
