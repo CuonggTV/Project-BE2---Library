@@ -15,7 +15,7 @@ public class CustomerView implements IView{
         Customer customer = (Customer) ob;
         System.out.println("Username: "+customer.getUserName());
         System.out.println("Name: "+customer.getFirstName() +" "+customer.getMiddleName()+" "+customer.getLastName());
-        System.out.println("Phonenumber: "+customer.getPhoneNumber());
+        System.out.println("Phone number: "+customer.getPhoneNumber());
     }
 
     public void showAllInfo(int id) throws SQLException {
@@ -33,7 +33,7 @@ public class CustomerView implements IView{
                     resultSet.getString("lastname")
             );
             System.out.println("Phone number: " +resultSet.getString("phonenumber"));
-            System.out.println("Balance" + resultSet.getString("balance"));
+            System.out.println("Balance: " + resultSet.getString("balance"));
             System.out.println("----------------------------------------------------------");
         }
     }
@@ -115,10 +115,10 @@ public class CustomerView implements IView{
 
         while(resultSet.next()){
             System.out.println("-----------------------------------------------------------------");
-            System.out.println("(LoanID: " +resultSet.getInt("loan.id") );
+            System.out.println("LoanID: " +resultSet.getInt("loan.id") );
             System.out.println("    Book: \""+resultSet.getString("bookName")
                     +"\" written by: " + resultSet.getString("author") );
-            System.out.println("    Return date" + resultSet.getString("returnDate"));
+            System.out.println("    Return date: " + resultSet.getString("returnDate"));
             System.out.println("-----------------------------------------------------------------\n");
         }
     }
@@ -184,11 +184,10 @@ public class CustomerView implements IView{
     public int showUpdateInfoMenu(){
         System.out.println("1. Update username.");
         System.out.println("2. Update password.");
-        System.out.println("3. Update name.");
-        System.out.println("4. Update phone number.");
-        System.out.println("5. Add balance.");
-        System.out.println("6. Out.");
-        return OperationHelper.inputIntegerWithRange("Your choice: ",1,6);
+        System.out.println("3. Update phone number.");
+        System.out.println("4. Add balance.");
+        System.out.println("5. Out.");
+        return OperationHelper.inputIntegerWithRange("Your choice: ",1,5);
     }
 
     public void showReservation(int id) throws SQLException {
