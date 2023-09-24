@@ -6,6 +6,8 @@ import utils.OperationHelper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerView implements IView{
     @Override
@@ -54,15 +56,8 @@ public class CustomerView implements IView{
           return resultSet.getInt("id");
     }
 
-    @Override
-    //Also use as login
-    public Customer inputInfo() throws SQLException {
-        String username;
-        String password;
-        String firstName;
-        String middleName;
-        String lastName;
-        String phoneNumber;
+    public String inputUsername() throws SQLException {
+        String username = null;
         ResultSet resultSet;
 
         while (true){
@@ -76,12 +71,34 @@ public class CustomerView implements IView{
             }
             break;
         }
+        return username;
+    }
+    public String inputPhoneNumber() {
+        String phoneNumber = null;
 
-        password = OperationHelper.inputString("Enter your password: ");
-        firstName = OperationHelper.inputString("Enter your first name: ");
-        middleName = OperationHelper.inputString("Enter your middle name: ");
-        lastName = OperationHelper.inputString("Enter your last name: ");
-        phoneNumber = OperationHelper.inputString("Enter your phone number: ");
+        while (true){
+            phoneNumber = OperationHelper.inputString("Enter your phoneNumber: ");
+
+            if (phoneNumber.length()!=10 || OperationHelper.isNumeric(phoneNumber,"")){
+                System.out.println("Phone number must have 10 number");
+                continue;
+            }
+            break;
+        }
+        return phoneNumber;
+    }
+
+
+
+    @Override
+    //Also use as login
+    public Customer inputInfo() throws SQLException {
+        String username = inputUsername();
+        String password = OperationHelper.inputString("Enter your password: ");
+        String firstName = OperationHelper.inputString("Enter your first name: ");
+        String middleName = OperationHelper.inputString("Enter your middle name: ");
+        String lastName = OperationHelper.inputString("Enter your last name: ");
+        String phoneNumber = inputPhoneNumber();
 
         return new Customer(username,password,firstName,middleName,lastName,phoneNumber) ;
     }
@@ -102,7 +119,7 @@ public class CustomerView implements IView{
     }
 
     public void showOwnFine(int customerID) throws SQLException {
-        String sqlString = "select book.bookName, fine.amount, fine.deadline " +
+        String sqlString = "select fine.id, book.bookName, fine.amount, fine.deadline " +
                 "from fine " +
                 "INNER JOIN loan on fine.loanID = loan.id " +
                 "INNER JOIN book on loan.bookID = book.id " +
@@ -112,10 +129,63 @@ public class CustomerView implements IView{
 
         while(resultSet.next()){
             System.out.println("-----------------------------------------------------------------");
+            System.out.print(resultSet.getInt("id")+". ");
             System.out.println("Fine from returning \""+resultSet.getString("bookName") + "\" late");
             System.out.println("    Need to pay: " + resultSet.getString("amount") + " $");
             System.out.println("    Deadline: " + resultSet.getString("deadline"));
             System.out.println("-----------------------------------------------------------------\n");
         }
     }
+
+    public void showCategories(List<String> categories){
+
+        for(int i= 1;i<categories.size();i++){
+            System.out.println(i+". "+categories.get(i));
+        }
+    }
+    public String[] inputChoice(String mess){
+        String input = OperationHelper.inputString(mess);
+        return input.split(" ");
+        //return OperationHelper.isArrayOfInteger(choice, "Wrong input format") || choice[0].equals("none");
+    }
+    public void showBookByCategories(String sqlString) throws SQLException {
+        ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
+
+        System.out.println("-----------------------------------------------------------------\n");
+        while(resultSet.next()){
+            System.out.print(resultSet.getString("ID") +". ");
+            System.out.println("\"" +resultSet.getString("bookName") +"\""+ " written by " + "resultSet.getString(\"bookName\")" );
+        }
+        System.out.println("-----------------------------------------------------------------\n");
+
+    }
+
+    public boolean showResultBorrowBook(float totalmoney){
+        System.out.println("Your return date will be " + OperationHelper.DateString(1));
+        System.out.println("Total money: " + totalmoney);
+        if(OperationHelper.confirm("Confirm ?")){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean showNotEnoughCopies(String bookName){
+        System.out.println("There is no \""+bookName+ "\" left in the library!");
+        if(OperationHelper.confirm("Do you want to make a reservation ?")){
+            return true;
+        }
+        return false;
+    }
+
+    public int showUpdateInfoMenu(){
+        System.out.println("1. Update username.");
+        System.out.println("2. Update password.");
+        System.out.println("3. Update name.");
+        System.out.println("4. Update phone number.");
+        System.out.println("5. Add balance.");
+        System.out.println("6. Out.");
+        return OperationHelper.inputIntegerWithRange("Your choice: ",1,6);
+    }
+
+
 }

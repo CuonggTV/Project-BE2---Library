@@ -1,5 +1,8 @@
 package utils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class OperationHelper {
@@ -42,6 +45,16 @@ public class OperationHelper {
         } while (true);
     }
 
+    public static boolean isNumeric(String num, String mess){
+        try {
+            Integer.parseInt(num);
+        } catch (NumberFormatException e) {
+            System.out.println(mess);
+            return false;
+        }
+        return true;
+    }
+
 
     public static float inputFloat(String message)
     {
@@ -50,4 +63,30 @@ public class OperationHelper {
 
         return sc.nextFloat();
     }
+
+    public static boolean confirm(String confirmMess){
+        System.out.println(confirmMess);
+        if(OperationHelper.inputIntegerWithRange("1.Yes     2.No",1,2) ==1)
+            return true;
+        return false;
+    }
+    public static boolean isArrayOfInteger(String []arr){
+        for (String s : arr) {
+            try {
+                Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                System.out.println("Wrong input.");
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public static String DateString(int plusMonth){
+        LocalDateTime ldt = LocalDateTime.now().plusMonths(plusMonth);
+        DateTimeFormatter format1 = DateTimeFormatter.ofPattern("yyyyMMdd", Locale.ENGLISH);
+        return format1.format(ldt);
+    }
+
+//    public void formatName()
 }

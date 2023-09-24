@@ -8,9 +8,9 @@ public class CustomerMenu extends AbstractMenu {
     private int id;
     private final CustomerController customerController;
     public final static String[] CHOICE_OPTIONS = {
+            "Update information.",
             "Check borrowed books.",
             "Check own fines.",
-            "Show list of books.",
             "Borrow books."
     };
 
@@ -32,16 +32,17 @@ public class CustomerMenu extends AbstractMenu {
     public void eventHandler(int whichChoice) throws SQLException {
         switch (whichChoice){
             case 1:
+                customerController.updateInformation(id);
+                break;
+
+            case 2:
                 customerController.showBorrowedBooks(id);
                 break;
-            case 2:
-                customerController.showOwnFine(id);
-                break;
             case 3:
-
+//                customerController.showOwnFine(id);
                 break;
             case 4:
-
+                customerController.borrowBook(id);
                 break;
         }
     }

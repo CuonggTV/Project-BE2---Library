@@ -7,7 +7,8 @@ create table Customer (
     firstname varchar(20),
     middlename varchar(50),
     lastname varchar(20),
-    phonenumber char(10)
+    phonenumber char(10),
+    balance float not null
 );
 
 create table Book (
