@@ -1,11 +1,13 @@
 package controllers;
 
+import config.Mysql;
 import models.Customer;
 import services.CustomerServices;
 import utils.OperationHelper;
 import views.AdminView;
 import views.CustomerView;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +83,7 @@ public class CustomerController {
                     int loanID = Integer.parseInt(choice[0]);
                     if(services.checkLoan(loanID)) {
                         services.disableLoan(id,loanID);
+                        returnBookTrigger(loanID);
                         System.out.println("LoanID: "+ loanID +" has been paid!");
                     }
                 }
@@ -166,15 +169,11 @@ public class CustomerController {
                 case 2 -> {
                     services.updatePassword(id,OperationHelper.inputString("Enter new password"));
                 }
-                case 3 ->
-                {
-
-                }
-                case 4->
+                case 3->
                 {
                     services.updatePhoneNumber(id,view.inputPhoneNumber());
                 }
-                case 5-> {
+                case 4-> {
                     //view.showBalace(id)
                     services.addBalance(id,OperationHelper.inputFloat("Enter balance: "));
                     System.out.println("Add successful.");
@@ -191,7 +190,17 @@ public class CustomerController {
         view.showReservation(id);
     }
 
+    public void returnBookTrigger(int id) throws SQLException {
+        String sql = "select book.copiesOwned from book, loan where loan.id = " + id + " and book.id = loan.bookid";
+        ResultSet resultSet = Mysql.statement.executeQuery(sql);
+        int copies = 0;
 
+        while (resultSet.next()){
+            copies = resultSet.getInt("copiesOwned");
+        }
 
-
+        copies++;
+        sql = "Update book set copiesOwned = " + copies+ " where id = "+id;
+        Mysql.statement.executeUpdate(sql);
+    }
 }

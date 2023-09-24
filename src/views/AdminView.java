@@ -255,7 +255,7 @@ public class AdminView {
     }
 
     public void addBookTrigger(int id) throws SQLException {
-        String sql = "Update reservation set status = 1 where id = "+id;
+        String sql = "Update reservation set status = 1 where bookid = "+id;
         Mysql.statement.executeUpdate(sql);
     }
     private void AmountOfBook(int id, int currentCopiesOwned, String bookName) {
@@ -366,8 +366,6 @@ public class AdminView {
 
     public String turnChoicesToSQL(String choice[], List<String> categories, int bookID){
         StringBuilder sqlString = new StringBuilder("Update bookcategories set  ");
-
-
         for(int i =0;i<choice.length;i++){
             try {
                 sqlString.append("`").append(categories.get(Integer.parseInt(choice[i]))).append("` = 1 ");
