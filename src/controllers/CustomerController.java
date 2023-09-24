@@ -109,6 +109,7 @@ public class CustomerController {
                 // Khi customer ko con tien
                 if(!services.subtractBalance(customerID,totalMoney)){
                     System.out.println("Not enough money!");
+                    return;
                 }
 
                 for (String s : choice) {
