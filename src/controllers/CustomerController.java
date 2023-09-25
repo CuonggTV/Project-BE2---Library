@@ -1,8 +1,11 @@
 package controllers;
 
 import config.Mysql;
+import models.Category;
 import models.Customer;
+import models.Loan;
 import services.CustomerServices;
+import trigger.BookTrigger;
 import utils.OperationHelper;
 import views.AdminView;
 import views.CustomerView;
@@ -81,9 +84,11 @@ public class CustomerController {
         if(OperationHelper.isArrayOfInteger(choice)){
                 for(int i =0;i<choice.length;i++){
                     int loanID = Integer.parseInt(choice[0]);
-                    if(services.checkLoan(loanID)) {
-                        services.disableLoan(id,loanID);
-                        returnBookTrigger(loanID);
+                    Loan loan = new Loan();
+                    loan.setLoanByID(loanID);
+                    if(loan.getId() != 0) {
+                        services.disableLoan(loan.getCustomerID(),loanID);
+                        BookTrigger.payLoanTrigger(loan.getBookID());
                         System.out.println("LoanID: "+ loanID +" has been paid!");
                     }
                 }
@@ -96,7 +101,6 @@ public class CustomerController {
         String []choice = view.inputChoice("Enter bookID you want to borrow or none: ");
         if(OperationHelper.isArrayOfInteger(choice)){
             if (!choice[0].equals( "none")){
-
                 //Check xem con book ko
                 float totalMoney = 0;
                 for (String value : choice) {
@@ -117,7 +121,7 @@ public class CustomerController {
 
                 for (String s : choice) {
                     int bookID= Integer.parseInt(s);
-                    //Khi library het book
+                    //Khi library het book, tao reservation
                     if(!services.subtractCopiesOwned(bookID)){
                         if(view.showNotEnoughCopies(CustomerServices.getBookName(bookID))){
                             services.createReservation(customerID,bookID);
@@ -135,7 +139,7 @@ public class CustomerController {
 
     public void borrowBook(int id) throws SQLException {
         List<String> categories = new ArrayList<>();
-        CustomerServices.getCategories(categories);
+        Category.getCategories(categories);
         view.showCategories(categories);
 
         String []choice = view.inputChoice("Enter categories you want to see or none:");

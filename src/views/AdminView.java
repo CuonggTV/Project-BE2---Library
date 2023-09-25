@@ -1,7 +1,10 @@
 package views;
 
 import config.Mysql;
+import models.Category;
 import services.CustomerServices;
+import services.SqlToString;
+import trigger.BookTrigger;
 import utils.OperationHelper;
 
 import java.sql.*;
@@ -58,9 +61,8 @@ public class AdminView {
             Connection connection = Mysql.getConnected();
             Statement statement = connection.createStatement();
             String query = "INSERT INTO book (id, bookName, author, borrowedFee, copiesOwned) " +
-                    "VALUES (" + id + ", '" + bookName + "', '" + author + "', " + borrowedFee + ", " + copiesOwned + ")";
+                    "VALUES (" + id + ", \"" + bookName + "\", \"" + author + "\", " + borrowedFee + ", " + copiesOwned + ")";
             statement.executeUpdate(query);
-            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -107,7 +109,7 @@ public class AdminView {
         String input;
         do {
             input = OperationHelper.inputString("Input the ID of the book you want to delete which MUST BE in list : ");
-            if (OperationHelper.isNumeric(input,"Must be a number or none.")){
+            if (OperationHelper.isNumeric(input)){
                 id = Integer.parseInt(input);
             }
             else if(input.equals("none")){
@@ -245,18 +247,13 @@ public class AdminView {
                 System.out.println("Current amount of book with ID " + id + " is " + copiesOwned);
                 AmountOfBook(id, copiesOwned, bookName);
                 System.out.println("+---------------------------------------------------------------------------------------------------------------+\n");
-                addBookTrigger(id);
+                BookTrigger.addBookTrigger(id);
             } else {
                 System.out.println("Book with ID " + id + " does not exist.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public void addBookTrigger(int id) throws SQLException {
-        String sql = "Update reservation set status = 1 where bookid = "+id;
-        Mysql.statement.executeUpdate(sql);
     }
     private void AmountOfBook(int id, int currentCopiesOwned, String bookName) {
 
@@ -314,7 +311,7 @@ public class AdminView {
         String name = null;
         boolean notLoop;
         List<String> categories = new ArrayList<>();
-        CustomerServices.getCategories(categories);
+        Category.getCategories(categories);
 
        do{
             notLoop = true;
@@ -335,7 +332,7 @@ public class AdminView {
 
         CustomerView view = new CustomerView();
         List<String> categories = new ArrayList<>();
-        CustomerServices.getCategories(categories);
+        Category.getCategories(categories);
         view.showCategories(categories);
         String oldName = null;
         String name =null;
@@ -368,23 +365,9 @@ public class AdminView {
         Mysql.statement.executeUpdate(sqlString);
     }
 
-    public String turnChoicesToSQL(String choice[], List<String> categories, int bookID){
-        StringBuilder sqlString = new StringBuilder(" bookcategories set  ");
-        for(int i =0;i<choice.length;i++){
-            try {
-                sqlString.append("`").append(categories.get(Integer.parseInt(choice[i]))).append("` = 1 ");
-            }
-            catch (Exception e){
-                System.out.println("This is not in categories");
-                return null;
-            }
-            if (i!= choice.length-1){
-                sqlString.append(", ");
-            }
-        }
-        sqlString.append(" where bookID = ").append(bookID);
-        return sqlString.toString();
-    }
+
+
+
     public void addBookCategories() throws SQLException {
         //Show book
         showInfoOfAllBooks();
@@ -398,17 +381,25 @@ public class AdminView {
             break;
         }while(true);
 
+        if(!Category.checkBooKCategory(bookID)){
+            Category.createNewBookInCategory(bookID);
+        }
+
 
         CustomerView view = new CustomerView();
         List<String> categories = new ArrayList<>();
-        CustomerServices.getCategories(categories);
+        Category.getCategories(categories);
         view.showCategories(categories);
 
         String []choice = view.inputChoice("Enter category you want to add or none:");
-        if(OperationHelper.isArrayOfInteger(choice)){
-            String sql = turnChoicesToSQL(choice,categories,bookID);
-            if(sql == null) return;
-            Mysql.statement.executeUpdate(sql);
+
+        for (String x :choice){
+            if(OperationHelper.isNumeric(x)){
+
+                String sql = SqlToString.SQLAddNewCategory_to_Book(choice,categories,bookID);
+                if(sql.length()==0) return;
+                Mysql.statement.executeUpdate(sql);
+            }
         }
     }
 

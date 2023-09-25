@@ -55,3 +55,15 @@ create table Reservation (
     FOREIGN KEY (customerID) REFERENCES customer(id)
 );
 
+-- Nhớ set safe update off để chạy update
+SET SQL_SAFE_UPDATES = 0;
+
+CREATE TRIGGER after_loan_insert  AFTER INSERT
+    ON loan
+    for each row
+    UPDATE book
+    SET copiesOwned = copiesOwned - 1
+    where id = (select bookid from loan where bookid = book.id Limit 1) and copiesOwned > 0;
+;
+
+

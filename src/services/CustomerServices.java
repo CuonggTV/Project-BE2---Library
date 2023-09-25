@@ -2,6 +2,7 @@ package services;
 
 import config.Mysql;
 import models.Customer;
+import trigger.BookTrigger;
 import utils.OperationHelper;
 
 import java.sql.ResultSet;
@@ -141,15 +142,7 @@ public class CustomerServices{
 //        Mysql.statement.executeUpdate(sqlString);
 //    }
 
-    public static void getCategories(List<String> categories) throws SQLException {
-        String sqlString = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS " +
-                "WHERE TABLE_NAME = 'bookcategories' and table_schema = 'testlibrary' order by ORDINAL_POSITION;";
-        ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
 
-        while(resultSet.next()){
-            categories.add(resultSet.getString("COLUMN_NAME"));
-        }
-    }
     public String turnChoicesToSQL(String []choice, List<String> categories){
         StringBuilder sqlString = new StringBuilder("select book.id, book.bookName , book.author from book, bookcategories " +
                 "where book.id = bookcategories.bookID and ");
@@ -206,6 +199,7 @@ public class CustomerServices{
                 "values(" + bookID + "," + customerID + "," +
                 "CURRENT_DATE(), DATE_ADD(CURRENT_DATE(), INTERVAL 14 day),0);";
         Mysql.statement.executeUpdate(sqlString);
+        BookTrigger.insertFineTrigger(bookID);
     }
 
     public void createReservation(int customerID, int bookID) throws SQLException {
@@ -241,7 +235,7 @@ public class CustomerServices{
         while (resultSet.next()){
             copiesOwned = resultSet.getInt("copiesOwned");
         }
-        if(copiesOwned -1 == 0) return false;
+        if(copiesOwned -1 < 0) return false;
         else{
             copiesOwned--;
             sqlString = "Update book set copiesOwned = " + copiesOwned + " where id = " +bookID;

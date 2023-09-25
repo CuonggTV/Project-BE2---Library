@@ -89,11 +89,11 @@ public class OperationHelper {
         } while (true);
     }
 
-    public static boolean isNumeric(String num, String errmess){
+    public static boolean isNumeric(String num){
         try {
             Integer.parseInt(num);
         } catch (NumberFormatException e) {
-            System.out.println(errmess);
+            System.out.println("Must be a number!");
             return false;
         }
         return true;
