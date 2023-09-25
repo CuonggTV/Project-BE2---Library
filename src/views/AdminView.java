@@ -365,7 +365,7 @@ public class AdminView {
     }
 
     public String turnChoicesToSQL(String choice[], List<String> categories, int bookID){
-        StringBuilder sqlString = new StringBuilder("Update bookcategories set  ");
+        StringBuilder sqlString = new StringBuilder(" bookcategories set  ");
         for(int i =0;i<choice.length;i++){
             try {
                 sqlString.append("`").append(categories.get(Integer.parseInt(choice[i]))).append("` = 1 ");

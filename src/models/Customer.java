@@ -1,5 +1,9 @@
 package models;
 
+import config.Mysql;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Customer {
     private int id;
     private String userName;
@@ -8,6 +12,7 @@ public class Customer {
     private String middleName;
     private String lastName;
     private String phoneNumber;
+    private float balance;
 
 
     public Customer() {
@@ -27,7 +32,7 @@ public class Customer {
         this.phoneNumber = phoneNumber;
     }
 
-    public int getId(int firstname) {
+    public int getId() {
         return id;
     }
 
@@ -75,6 +80,33 @@ public class Customer {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+
+    public float getBalance() {
+        return balance;
+    }
+
+    public void setBalance(float balance) {
+        this.balance = balance;
+    }
+
+    public void getCustomerByID(int customerID) throws SQLException {
+        String sqlString = "select * from customer where id = "+ customerID ;
+        ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
+
+        while (resultSet.next()) {
+            id = resultSet.getInt("id");
+            userName = resultSet.getString("username");
+            password = resultSet.getString("password");
+            firstName = resultSet.getString("firstname");
+            middleName = resultSet.getString("middlename");
+            lastName = resultSet.getString("lastname");
+            phoneNumber = resultSet.getString("phonenumber");
+
+            balance = resultSet.getFloat("balance");
+        }
+
     }
 
 

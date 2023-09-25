@@ -54,3 +54,4 @@ create table Reservation (
     FOREIGN KEY (bookID) REFERENCES book(id),
     FOREIGN KEY (customerID) REFERENCES customer(id)
 );
+
