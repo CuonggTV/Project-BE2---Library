@@ -102,8 +102,9 @@ public class CustomerView implements IView{
         String middleName = OperationHelper.inputString("Enter your middle name: ");
         String lastName = OperationHelper.inputString("Enter your last name: ");
         String phoneNumber = inputPhoneNumber();
+        float balance = OperationHelper.inputNotNegativeNumber("Enter your balance");
 
-        return new Customer(username,password,firstName,middleName,lastName,phoneNumber) ;
+        return new Customer(username,password,firstName,middleName,lastName,phoneNumber, balance) ;
     }
 
     public void showBorrowedBooks(int customerID) throws SQLException {
@@ -191,7 +192,7 @@ public class CustomerView implements IView{
     }
 
     public void showReservation(int id) throws SQLException {
-        String sql = "SELECT book.bookName, rs.dateCreated, rs.status from reservation as rs, book " +
+        String sql = "SELECT book.bookName,rs.dateCreated,rs.status from reservation as rs, book " +
                 "where rs.customerID = " +id +" and book.id = rs.bookID;" ;
         ResultSet resultSet = Mysql.statement.executeQuery(sql);
 
