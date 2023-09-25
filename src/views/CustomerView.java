@@ -102,8 +102,9 @@ public class CustomerView implements IView{
         String middleName = OperationHelper.inputString("Enter your middle name: ");
         String lastName = OperationHelper.inputString("Enter your last name: ");
         String phoneNumber = inputPhoneNumber();
+        float balance = OperationHelper.inputNotNegativeNumber("Enter your balance");
 
-        return new Customer(username,password,firstName,middleName,lastName,phoneNumber) ;
+        return new Customer(username,password,firstName,middleName,lastName,phoneNumber, balance) ;
     }
 
     public void showBorrowedBooks(int customerID) throws SQLException {

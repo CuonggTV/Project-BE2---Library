@@ -37,6 +37,22 @@ public class OperationHelper {
         return value;
     }
 
+    public static float inputNotNegativeNumber(String message) {
+        Scanner sc = new Scanner(System.in);
+        float balance;
+        do {
+
+            System.out.println("You can add balance later by typing 0 but do not input negative number! ");
+            System.out.println(message);
+            balance = sc.nextFloat();
+            if(balance < 0)
+            {
+                System.out.println("Your balance cannot negative!\nPlease input again: ");
+            }
+        } while (balance < 0);
+        return balance;
+    }
+
     public static Integer inputIntegerWithRange(String message, int min, int max) {
         Scanner sc = new Scanner(System.in);
         do {

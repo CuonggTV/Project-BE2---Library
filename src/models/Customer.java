@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Scanner;
+
 public class Customer {
     private int id;
     private String userName;
@@ -8,6 +10,7 @@ public class Customer {
     private String middleName;
     private String lastName;
     private String phoneNumber;
+    private float balance;
 
 
     public Customer() {
@@ -18,13 +21,14 @@ public class Customer {
     }
 
 
-    public Customer(String userName, String password, String firstName, String middleName,String lastName, String phoneNumber) {
+    public Customer(String userName, String password, String firstName, String middleName,String lastName, String phoneNumber, float balance) {
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
+        this.balance = balance;
     }
 
     public int getId(int firstname) {
@@ -71,6 +75,14 @@ public class Customer {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public float getBalance() {
+        return balance;
+    }
+
+    public void setBalance(float balance) {
+        this.balance = balance;
     }
 
     public void setPhoneNumber(String phoneNumber) {

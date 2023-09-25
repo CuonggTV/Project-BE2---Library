@@ -28,13 +28,14 @@ public class CustomerServices{
     }
 
     public void add(Customer customer) throws SQLException {
-        String sqlString = "insert into customer(username,password,firstname,middlename,lastname,phonenumber) values(\""+
+        String sqlString = "insert into customer(username,password,firstname,middlename,lastname,phonenumber,balance) values(\""+
                 customer.getUserName() +"\",\"" +
                 customer.getPassword() +"\",\"" +
                 customer.getFirstName() + "\",\"" +
                 customer.getMiddleName() + "\",\"" +
                 customer.getLastName() + "\",\"" +
-                customer.getPhoneNumber() +"\");";
+                customer.getPhoneNumber() +"\",\"" +
+                customer.getBalance() +"\");";
         System.out.println(sqlString);
         Mysql.statement.executeUpdate(sqlString);
     }
@@ -65,12 +66,12 @@ public class CustomerServices{
     }
 
     public void updateUsername(int id, String newUsername) throws SQLException {
-        String sqlString = "Update customer set username = " + newUsername + " where id = " +id;
+        String sqlString = "UPDATE customer SET username = '" + newUsername + "' WHERE id = " + id;
         Mysql.statement.executeUpdate(sqlString);
     }
 
     public void updatePassword(int id, String newPassword) throws SQLException {
-        String sqlString = "Update customer set password = " + newPassword + " where id = " +id;
+        String sqlString = "Update customer set password = '" + newPassword + "' where id = " +id;
         Mysql.statement.executeUpdate(sqlString);
     }
 

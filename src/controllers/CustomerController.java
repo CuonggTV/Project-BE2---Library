@@ -160,7 +160,8 @@ public class CustomerController {
 
     public void updateInformation(int id) throws SQLException {
         view.showAllInfo(id);
-        while (true)
+        boolean check = true;
+        while (check)
         {
             switch (view.showUpdateInfoMenu()){
                 case 1 -> {
@@ -177,9 +178,10 @@ public class CustomerController {
                     //view.showBalace(id)
                     services.addBalance(id,OperationHelper.inputFloat("Enter balance: "));
                     System.out.println("Add successful.");
+
                 }
-                case 6 ->{
-                    return;
+                default -> {
+                    check = false;
                 }
             }
         }
