@@ -176,7 +176,7 @@ public class CustomerController {
                 }
                 case 4-> {
                     //view.showBalace(id)
-                    services.addBalance(id,OperationHelper.inputFloat("Enter balance: "));
+                    services.addBalance(id, OperationHelper.inputFloat("Input your balance: "));
                     System.out.println("Add successful.");
 
                 }

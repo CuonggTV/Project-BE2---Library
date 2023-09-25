@@ -76,20 +76,19 @@ public class CustomerView implements IView{
     public String inputPhoneNumber() {
         String phoneNumber = null;
 
-        while (true){
-            phoneNumber = OperationHelper.inputString("Enter your phoneNumber: ");
+        while (true) {
+            phoneNumber = OperationHelper.inputString("Enter your phone number: ");
 
-            if(phoneNumber.length()==10) {
+            if (phoneNumber.matches("\\d{10}")) {
                 break;
+            } else {
+                System.out.println("Phone number must have exactly 10 digits and no letters.");
             }
-            else if (OperationHelper.isNumeric(phoneNumber,"")){
-                System.out.println("Phone number must have 10 number");
-                continue;
-            }
-            break;
         }
+
         return phoneNumber;
     }
+
 
 
 
@@ -102,7 +101,7 @@ public class CustomerView implements IView{
         String middleName = OperationHelper.inputString("Enter your middle name: ");
         String lastName = OperationHelper.inputString("Enter your last name: ");
         String phoneNumber = inputPhoneNumber();
-        float balance = OperationHelper.inputNotNegativeNumber("Enter your balance");
+        float balance = 0;
 
         return new Customer(username,password,firstName,middleName,lastName,phoneNumber, balance) ;
     }

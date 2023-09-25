@@ -263,6 +263,10 @@ public class AdminView {
         int amountOfBook = 0;
         try {
             do {
+                if(amountOfBook < 0)
+                {
+                    System.out.println("Cannot input negative number!");
+                }
                 amountOfBook = OperationHelper.inputInteger("Input the amount of book you want to add: ");
             } while (amountOfBook < 0);
             int newCopiesOwned = currentCopiesOwned + amountOfBook;

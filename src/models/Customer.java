@@ -23,14 +23,17 @@ public class Customer {
     }
 
 
-    public Customer(String userName, String password, String firstName, String middleName,String lastName, String phoneNumber) {
+    public Customer(String userName, String password, String firstName, String middleName,String lastName, String phoneNumber, float balance) {
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
+        this.balance = balance;
     }
+
+
 
     public int getId() {
         return id;
