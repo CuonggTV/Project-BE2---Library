@@ -96,10 +96,10 @@ public class CustomerView implements IView{
     //Also use as login
     public Customer inputInfo() throws SQLException {
         String username = inputUsername();
-        String password = OperationHelper.inputString("Enter your password: ");
-        String firstName = OperationHelper.inputString("Enter your first name: ");
-        String middleName = OperationHelper.inputString("Enter your middle name: ");
-        String lastName = OperationHelper.inputString("Enter your last name: ");
+        String password = OperationHelper.inputString("--> Enter your password: ");
+        String firstName = OperationHelper.inputOnlyAlphabet("--> Enter your first name: ");
+        String middleName = OperationHelper.inputOnlyAlphabet("--> Enter your middle name: ");
+        String lastName = OperationHelper.inputOnlyAlphabet("--> Enter your last name: ");
         String phoneNumber = inputPhoneNumber();
         float balance = 0;
 

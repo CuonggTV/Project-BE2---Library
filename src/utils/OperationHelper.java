@@ -18,6 +18,24 @@ public class OperationHelper {
         } while (true);
     }
 
+    public static String inputOnlyAlphabet(String message) {
+        Scanner scanner = new Scanner(System.in);
+        String input;
+        System.out.println(message);
+        while (true) {
+            System.out.print("Enter alphabetic characters only (maximum 100 characters): ");
+            input = scanner.nextLine();
+
+            if (input.matches("[a-zA-Z]+") && input.length() <= 100) {
+                break;
+            } else {
+                System.out.println("Invalid input. Please enter alphabetic characters only (maximum 100 characters).");
+            }
+        }
+
+        return input;
+    }
+
     public static int inputInteger(String message) {
         int value;
         Scanner sc = new Scanner(System.in);
