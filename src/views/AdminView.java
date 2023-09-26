@@ -385,23 +385,28 @@ public class AdminView {
             Category.createNewBookInCategory(bookID);
         }
 
-
         CustomerView view = new CustomerView();
         List<String> categories = new ArrayList<>();
+        List<String> bookCategories = new ArrayList<>();
         Category.getCategories(categories);
+        Category.getListBookCategory(bookID,bookCategories,categories);
+        view.showBookCategories(bookCategories);
         view.showCategories(categories);
+
 
         String []choice = view.inputChoice("Enter category you want to add or none:");
 
-        for (String x :choice){
-            if(OperationHelper.isNumeric(x)){
+//        System.out.println("CHOICE LENGTH: "+ choice.length);
+//        for(int i = 0;i<choice.length;i++){
+//            System.out.println("CHOICE " + i +": "+choice[i]);
+//        }
 
-                String sql = SqlToString.SQLAddNewCategory_to_Book(choice,categories,bookID);
-                if(sql.length()==0) return;
-                Mysql.statement.executeUpdate(sql);
-            }
-        }
+        String sql = SqlToString.SQLAddNewCategory_to_Book(choice,categories,bookID);
+        if (sql==null) return;
+        Mysql.statement.executeUpdate(sql);
     }
+
+
 
 
 

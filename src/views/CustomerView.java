@@ -207,5 +207,12 @@ public class CustomerView implements IView{
         }
     }
 
+    public void showBookCategories(List<String> bookCategories){
+        System.out.println("This book has these categories: ");
+        for(int i= 0;i<bookCategories.size();i++){
+            System.out.println("    - " + bookCategories.get(i));
+        }
+    }
+
 
 }

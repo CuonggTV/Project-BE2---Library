@@ -6,20 +6,19 @@ import java.util.List;
 
 public class SqlToString {
     public static String SQLAddNewCategory_to_Book(String choice[], List<String> categories, int bookID){
+        if(choice[0].equals("none")) return null;
         StringBuilder sqlString = new StringBuilder("UPDATE bookcategories set ");
         for(int i =0;i<choice.length;i++){
 
-            int status = OperationHelper.inputIntegerWithRange("1.Able  2.Disable",1,2);
-            sqlString.append("`").append(categories.get(Integer.parseInt(choice[i]))).append("` = ").append(status);
-
-
-//            try {
-//                sqlString.append("`").append(categories.get(Integer.parseInt(choice[i]))).append("` = 1 ");
-//            }
-//            catch (Exception e){
-//                System.out.println("This is not in categories");
-//                return null;
-//            }
+            try {
+                System.out.println("Category: "+ categories.get(Integer.parseInt(choice[i])));
+                int status = OperationHelper.inputIntegerWithRange("0.Disable   1.Able",0,1);
+                sqlString.append("`").append(categories.get(Integer.parseInt(choice[i]))).append("` = ").append(status);
+            }
+            catch (Exception e){
+                System.out.println("Choice must be numeric!");
+                return null;
+            }
             if (i!= choice.length-1){
                 sqlString.append(", ");
             }
