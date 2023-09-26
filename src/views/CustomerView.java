@@ -9,8 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerView implements IView{
-    @Override
+public class CustomerView{
     public void showInfo(Object ob) {
         Customer customer = (Customer) ob;
         System.out.println("Username: "+customer.getUserName());
@@ -88,11 +87,6 @@ public class CustomerView implements IView{
 
         return phoneNumber;
     }
-
-
-
-
-    @Override
     //Also use as login
     public Customer inputInfo() throws SQLException {
         String username = inputUsername();
