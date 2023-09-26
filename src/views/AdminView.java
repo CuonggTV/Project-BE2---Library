@@ -392,7 +392,11 @@ public class AdminView {
         List<String> bookCategories = new ArrayList<>();
         Category.getCategories(categories);
         Category.getListBookCategory(bookID,bookCategories,categories);
-        view.showBookCategories(bookCategories);
+        if (bookCategories.isEmpty()){
+            System.out.println("This book has no category!");
+        }
+        else view.showBookCategories(bookCategories);
+        System.out.println();
         view.showCategories(categories);
 
 

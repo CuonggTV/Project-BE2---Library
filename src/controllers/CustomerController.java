@@ -84,7 +84,7 @@ public class CustomerController {
                         return;
                     }
                     if (services.deleteFine(id, loanID)) {
-                        System.out.println("Fine with loanID(" + loanID + ") has been returned!");
+                        System.out.println("Fine with loanID(" + loanID + ") has been paid!");
                         fineList.remove(j);
                         break;
                     }
@@ -120,7 +120,7 @@ public class CustomerController {
                     inList = true;
                     services.disableLoan(id, loanID);
                     BookTrigger.payLoanTrigger(loanList.get(j).getBookID());
-                    System.out.println("LoanID: " + loanID + " has been paid!");
+                    System.out.println("LoanID: " + loanID + " has been returned!");
                     loanList.remove(j);
                     break;
                 }
@@ -135,14 +135,36 @@ public class CustomerController {
         String []choice = view.inputChoice("Enter bookID you want to borrow or none: ");
             if (!choice[0].equals( "none")){
                 //Check xem con book ko
+                List<Integer> choiceInt = new ArrayList<>();
                 float totalMoney = 0;
                 for (String value : choice) {
-                    int bookID = Integer.parseInt(value);
+                    int bookID;
+                    try{
+                        bookID = Integer.parseInt(value);
+                    }
+                    catch(Exception e){
+                        System.out.println(value + " must be numeric");
+                        continue;
+                    }
+
+                    //Khi library het books
+                    if(!services.subtractCopiesOwned(bookID)){
+                        if(view.showNotEnoughCopies(CustomerServices.getBookName(bookID))){
+                            services.createReservation(customerID,bookID);
+                        }
+                        continue;
+                    }
                     if (services.checkBook(bookID)) {
                         totalMoney += CustomerServices.getBorrowedFee(bookID);
-                    } else return;
+                    }
+                    choiceInt.add(bookID);
                 }
 
+
+                if (totalMoney ==0) {
+                    System.out.println("You didn't borrow anything!");
+                    return;
+                }
                 //Show return day va total money
                 if(!view.showResultBorrowBook(totalMoney)) return;
 
@@ -152,23 +174,8 @@ public class CustomerController {
                     return;
                 }
 
-                for (String s : choice) {
-                    int bookID;
-                    try{
-                        bookID= Integer.parseInt(s);
-                    }
-                    catch(Exception e){
-                        System.out.println(s + " must be a number!");
-                        continue;
-                    }
-                    //Khi library het book, tao reservation
-                    if(!services.subtractCopiesOwned(bookID)){
-                        if(view.showNotEnoughCopies(CustomerServices.getBookName(bookID))){
-                            services.createReservation(customerID,bookID);
-                        }
-                        else return;
-                    }
-                    else services.createLoan(customerID, bookID);
+                for (int bookID : choiceInt) {
+                    services.createLoan(customerID, bookID);
                 }
                 System.out.println("Successfully borrowed!");
             }

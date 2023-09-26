@@ -38,7 +38,6 @@ public class CustomerServices{
                 customer.getLastName() + "\",\"" +
                 customer.getPhoneNumber() +"\",\"" +
                 customer.getBalance() +"\");";
-        System.out.println(sqlString);
         Mysql.statement.executeUpdate(sqlString);
     }
 
@@ -74,64 +73,10 @@ public class CustomerServices{
     }
 
 
-//    private void calBalance(int id, float currentBalance) {
-//
-//        int additionBalance = 0;
-//        try {
-//            do {
-//                if(additionBalance < 0)
-//                {
-//                    System.out.println("Cannot input negative number!");
-//                }
-//                additionBalance = OperationHelper.inputInteger("Input the amount of book you want to add: ");
-//            } while (additionBalance < 0);
-//            float newBlance = currentBalance + additionBalance;
-//            String updateSql = "UPDATE customer SET balance = " + newBlance + " WHERE id = " + id;
-//            int rowsAffected = Mysql.statement.executeUpdate(updateSql);
-//
-//            if (rowsAffected > 0) {
-//                System.out.println("New balance of the customer with ID " + id  + " is " + newBlance);
-//            } else {
-//                System.out.println("Update failed. Please check again.");
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void addBalance(int id) {
-//        String sql = "SELECT balance FROM customer WHERE id = " + id;
-//        try {
-//            ResultSet resultSet3 = Mysql.statement.executeQuery(sql);
-//            if (resultSet3.next()) {
-//                float currentBalance = resultSet3.getInt("balance");
-//                System.out.println("+---------------------------------------------------------------------------------------------------------------+");
-//                System.out.println("Current amount of book with ID " + id + " is " + currentBalance);
-//                calBalance(id, currentBalance);
-//                System.out.println("+---------------------------------------------------------------------------------------------------------------+\n");
-//
-//            } else {
-//                System.out.println("Customer with ID " + id + " does not exist.");
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     public void addBalance(int id, float balance) throws SQLException {
         String sqlString = "Update customer set balance = " + balance + " where id = " +id;
         Mysql.statement.executeUpdate(sqlString);
     }
-
-//    public void updateUsername(int id, String newUsername) throws SQLException {
-//        String sqlString = "Update customer set username = " + newUsername + " where id = " +id;;
-//        Mysql.statement.executeUpdate(sqlString);
-//    }
-//
-//    public void updateUsername(int id, String newUsername) throws SQLException {
-//        String sqlString = "Update customer set username = " + newUsername + " where id = " +id;;
-//        Mysql.statement.executeUpdate(sqlString);
-//    }
 
 
     public String turnChoicesToSQL(String []choice, List<String> categories){

@@ -30,7 +30,7 @@ public class LoanList extends ArrayList<Loan> {
             System.out.println("-----------------------------------------------------------------");
             System.out.print(loan.getId()+". ");
             System.out.println("You borrow: \""+ Book.getBookNameByID(loan.getBookID()) + "\"");
-            System.out.println("    Return date: " + loan.getLoanDate());
+            System.out.println("    Return date: " + loan.getReturnDate());
             System.out.println("-----------------------------------------------------------------\n");
         }
     }
