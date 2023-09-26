@@ -26,10 +26,12 @@ public class LoginRegisterMenu extends AbstractMenu{
                     customerMenu.setId(id);
                     customerMenu.trigger();
                 }
+                System.out.println();
             }
             case 2 -> {
                 customerController.register();
                 customerMenu.trigger();
+                System.out.println();
             }
         }
     }

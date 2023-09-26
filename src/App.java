@@ -39,8 +39,13 @@ public class App extends AbstractMenu {
                     System.out.println("Login as admin successful!");
                     adminMenu.trigger();
                 } else System.out.println("Try again");
+                System.out.println();
+
             }
-            case 2 -> loginRegisterMenu.trigger();
+            case 2 -> {
+                loginRegisterMenu.trigger();
+                System.out.println();
+            }
         }
     }
 }

@@ -21,4 +21,9 @@ public class BookTrigger {
                 " where bookID = " + bookID;
         Mysql.statement.executeUpdate(sql);
     }
+    public static void haveNoCopies(int bookID) throws SQLException {
+        String sql = "UPDATE reservation SET status = 0 " +
+                " where bookID = " + bookID;
+        Mysql.statement.executeUpdate(sql);
+    }
 }

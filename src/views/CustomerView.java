@@ -157,8 +157,8 @@ public class CustomerView implements IView{
 
         System.out.println("-----------------------------------------------------------------");
         while(resultSet.next()){
-            System.out.print(resultSet.getString("ID") +". ");
-            System.out.println("\"" +resultSet.getString("bookName") +"\""+ " written by " + "resultSet.getString(\"bookName\")" );
+            System.out.print(resultSet.getInt("id") +". ");
+            System.out.println("\"" +resultSet.getString("bookName") +"\""+ " written by " + resultSet.getString("author"));
         }
         System.out.println("-----------------------------------------------------------------\n");
 

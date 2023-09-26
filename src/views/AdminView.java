@@ -247,7 +247,7 @@ public class AdminView {
                 System.out.println("Current amount of book with ID " + id + " is " + copiesOwned);
                 AmountOfBook(id, copiesOwned, bookName);
                 System.out.println("+---------------------------------------------------------------------------------------------------------------+\n");
-                BookTrigger.addBookTrigger(id);
+
             } else {
                 System.out.println("Book with ID " + id + " does not exist.");
             }
@@ -267,6 +267,8 @@ public class AdminView {
                 amountOfBook = OperationHelper.inputInteger("Input the amount of book you want to add: ");
             } while (amountOfBook < 0);
             int newCopiesOwned = currentCopiesOwned + amountOfBook;
+            //Reservation trigger
+            if(newCopiesOwned>0) BookTrigger.addBookTrigger(id);
             String updateSql = "UPDATE book SET copiesOwned = " + newCopiesOwned + " WHERE id = " + id;
             int rowsAffected = Mysql.statement.executeUpdate(updateSql);
 

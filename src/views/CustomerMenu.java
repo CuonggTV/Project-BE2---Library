@@ -34,18 +34,23 @@ public class CustomerMenu extends AbstractMenu {
         switch (whichChoice){
             case 1:
                 customerController.updateInformation(id);
+                System.out.println();
                 break;
             case 2:
                 customerController.payLoan(id);
+                System.out.println();
                 break;
             case 3:
                 customerController.payFine(id);
+                System.out.println();
                 break;
             case 4:
                 customerController.showReservation(id);
+                System.out.println();
                 break;
             case 5:
                 customerController.borrowBook(id);
+                System.out.println();
                 break;
         }
     }

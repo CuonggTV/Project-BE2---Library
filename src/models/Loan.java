@@ -85,7 +85,7 @@ public class Loan {
         }
     }
     public static int getBookID_By_LoanID(int loanID) throws SQLException {
-        String sqlString = "select bookID from book where id = "+ loanID ;
+        String sqlString = "select bookID from loan where id = "+ loanID ;
         ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
         int bookID = 0;
         while (resultSet.next()) {

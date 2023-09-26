@@ -75,7 +75,7 @@ public class CustomerController {
                     if(Loan.checkLoan(loanID)){
                         System.out.println(
                                 "Return book \"" + Book.getBookNameByID(Loan.getBookID_By_LoanID(loanID)) +
-                                " with loanID(" +loanID +") first!"
+                                "\" with loanID(" +loanID +") first!"
                         );
                         break;
                     }
@@ -84,7 +84,7 @@ public class CustomerController {
                         return;
                     }
                     if (services.deleteFine(id, loanID)) {
-                        System.out.println("Fine with loanID(" + loanID + ") has been paid!");
+                        System.out.println("Fine with loanID(" + loanID + ") has been returned!");
                         fineList.remove(j);
                         break;
                     }
@@ -118,7 +118,7 @@ public class CustomerController {
             for (int j = 0; j < loanList.size(); j++) {
                 if (loanID == loanList.get(j).getId()) {
                     inList = true;
-                    services.disableLoan(loanList.get(j).getCustomerID(), loanID);
+                    services.disableLoan(id, loanID);
                     BookTrigger.payLoanTrigger(loanList.get(j).getBookID());
                     System.out.println("LoanID: " + loanID + " has been paid!");
                     loanList.remove(j);
@@ -126,15 +126,13 @@ public class CustomerController {
                 }
             }
             if (!inList) System.out.println("LoanID: " + loanID + " is not in your loan.");
-
-
         }
+        System.out.println();
     }
 
 
     public void chooseBookAndBorrow(int customerID) throws SQLException {
         String []choice = view.inputChoice("Enter bookID you want to borrow or none: ");
-        if(OperationHelper.isArrayOfInteger(choice)){
             if (!choice[0].equals( "none")){
                 //Check xem con book ko
                 float totalMoney = 0;
@@ -146,7 +144,7 @@ public class CustomerController {
                 }
 
                 //Show return day va total money
-                view.showResultBorrowBook(totalMoney);
+                if(!view.showResultBorrowBook(totalMoney)) return;
 
                 // Khi customer ko con tien
                 if(!services.subtractBalance(customerID,totalMoney)){
@@ -155,7 +153,14 @@ public class CustomerController {
                 }
 
                 for (String s : choice) {
-                    int bookID= Integer.parseInt(s);
+                    int bookID;
+                    try{
+                        bookID= Integer.parseInt(s);
+                    }
+                    catch(Exception e){
+                        System.out.println(s + " must be a number!");
+                        continue;
+                    }
                     //Khi library het book, tao reservation
                     if(!services.subtractCopiesOwned(bookID)){
                         if(view.showNotEnoughCopies(CustomerServices.getBookName(bookID))){
@@ -167,14 +172,13 @@ public class CustomerController {
                 }
                 System.out.println("Successfully borrowed!");
             }
-        }
     }
 
 
 
     public void borrowBook(int id) throws SQLException {
         if(Fine.checkFine(id)){
-            System.out.println("You have a fine. Please  pay it first.");
+            System.out.println("You have a fine. Please pay it first.");
             return;
         }
 
@@ -210,18 +214,21 @@ public class CustomerController {
             switch (view.showUpdateInfoMenu()){
                 case 1 -> {
                     services.updateUsername(id,view.inputUsername());
+                    System.out.println();
                 }
                 case 2 -> {
                     services.updatePassword(id,OperationHelper.inputString("Enter new password"));
+                    System.out.println();
                 }
                 case 3->
                 {
                     services.updatePhoneNumber(id,view.inputPhoneNumber());
+                    System.out.println();
                 }
                 case 4-> {
                     services.addBalance(id, OperationHelper.inputFloat("Input your balance: "));
                     System.out.println("Add successful.");
-
+                    System.out.println();
                 }
                 default -> {
                     check = false;

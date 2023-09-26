@@ -190,7 +190,6 @@ public class CustomerServices{
                 "values(" + bookID + "," + customerID + "," +
                 "CURRENT_DATE(), DATE_ADD(CURRENT_DATE(), INTERVAL 14 day),0);";
         Mysql.statement.executeUpdate(sqlString);
-        BookTrigger.insertFineTrigger(bookID);
     }
 
     public void createReservation(int customerID, int bookID) throws SQLException {
@@ -227,11 +226,12 @@ public class CustomerServices{
             copiesOwned = resultSet.getInt("copiesOwned");
         }
         if(copiesOwned -1 < 0) return false;
-        else{
-            copiesOwned--;
-            sqlString = "Update book set copiesOwned = " + copiesOwned + " where id = " +bookID;
-            Mysql.statement.executeUpdate(sqlString);
-        }
+        if(copiesOwned - 1 == 0) BookTrigger.haveNoCopies(bookID);
+
+        copiesOwned--;
+        sqlString = "Update book set copiesOwned = " + copiesOwned + " where id = " +bookID;
+        Mysql.statement.executeUpdate(sqlString);
+
         return true;
     }
 
@@ -289,7 +289,7 @@ public class CustomerServices{
     }
 
     public void disableLoan(int customerID , int loanID) throws SQLException {
-        String sqlString = "Update loan set status = " + 1 + " where id = " +loanID +" and "+"customerID = "+customerID;;
+        String sqlString = "Update loan set status = 1 " + " where id = " +loanID +" and "+"customerID = "+customerID;
         Mysql.statement.executeUpdate(sqlString);
     }
 
@@ -303,8 +303,8 @@ public class CustomerServices{
             return false;
     }
 
-    public static void updateFine(int id, int amount) throws SQLException {
-        String sql = "Update fine set amount = " + amount + ", deadline = curdate() " +" where id = "+id;
+    public static void updateFine(int id, float amount) throws SQLException {
+        String sql = "Update fine set amount = " + amount + ", deadline = DATE_ADD(curdate(), INTERVAL 7 DAY) " +" where id = "+id;
         Mysql.statement.executeUpdate(sql);
     }
 
@@ -314,11 +314,11 @@ public class CustomerServices{
         ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
 
         List<Integer> idList = new ArrayList<>();
-        List<Integer> amountList = new ArrayList<>();
+        List<Float> amountList = new ArrayList<>();
 
         while (resultSet.next()){
             int id = resultSet.getInt("id");
-            int amount = resultSet.getInt("amount");
+            float amount = resultSet.getFloat("amount");
             amount += amount*0.1;
             idList.add(id);
             amountList.add(amount);
