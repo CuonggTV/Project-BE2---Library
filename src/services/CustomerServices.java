@@ -52,15 +52,6 @@ public class CustomerServices{
         return amount;
     }
 
-    public boolean checkLoan(int loanID) throws SQLException {
-        String sql = "SELECT COUNT(1) FROM loan WHERE id = " + loanID;
-        ResultSet resultSet = Mysql.statement.executeQuery(sql);
-        while (resultSet.next()) {
-            if(resultSet.getInt("COUNT(1)") ==0) return false;
-        }
-        return true;
-    }
-
 
     public void delete(int id) throws SQLException {
         String sqlString = "DELETE FROM customer WHERE id = " + id;
@@ -244,14 +235,7 @@ public class CustomerServices{
         return true;
     }
 
-    public static boolean checkFine(int loanID) throws SQLException {
-        String sqlString = "select id from fine where loanID = " +loanID;
-        ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
-        while(resultSet.next()){
-            return true;
-        }
-        return false;
-    }
+
     public static void createFine(int customerID, int loanID, float fee) throws SQLException {
         String sqlString = "INSERT into fine(customerID,loanID,deadline,amount) VALUES(" +
                 customerID+"," +

@@ -4,6 +4,7 @@ import config.Mysql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class Loan {
     private int id;
@@ -83,5 +84,21 @@ public class Loan {
             status = resultSet.getBoolean("status");
         }
     }
-
+    public static int getBookID_By_LoanID(int loanID) throws SQLException {
+        String sqlString = "select bookID from book where id = "+ loanID ;
+        ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
+        int bookID = 0;
+        while (resultSet.next()) {
+            bookID = resultSet.getInt("bookID");
+        }
+        return  bookID;
+    }
+    public static boolean checkLoan(int loanID) throws SQLException {
+        String sqlString = "SELECT COUNT(1) FROM loan WHERE id = " +loanID + " and status = 0";
+        ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
+        while (resultSet.next()) {
+            if(resultSet.getInt("COUNT(1)") ==0) return false;
+        }
+        return true;
+    }
 }

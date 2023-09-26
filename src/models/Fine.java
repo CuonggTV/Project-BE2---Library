@@ -75,4 +75,22 @@ public class Fine {
             amount = resultSet.getFloat("amount");
         }
     }
+
+    public static boolean checkFine1111(int customerID) throws SQLException {
+        String sqlString = "select id from fine where customerID = " +customerID;
+        ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
+        while(resultSet.next()){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean checkFine(int customerID) throws SQLException {
+        String sqlString = "SELECT COUNT(1) FROM fine WHERE customerID = " +customerID;
+        ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
+        while (resultSet.next()) {
+            if(resultSet.getInt("COUNT(1)") ==0) return false;
+        }
+        return true;
+    }
 }

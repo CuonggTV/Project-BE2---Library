@@ -131,7 +131,7 @@ public class OperationHelper {
     
     public static String DateString(int plusMonth){
         LocalDateTime ldt = LocalDateTime.now().plusMonths(plusMonth);
-        DateTimeFormatter format1 = DateTimeFormatter.ofPattern("yyyyMMdd", Locale.ENGLISH);
+        DateTimeFormatter format1 = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
         return format1.format(ldt);
     }
 

@@ -69,10 +69,19 @@ public class Book {
 
         while (resultSet.next()) {
             id = resultSet.getInt("id");
-            name = resultSet.getString("name");
+            name = resultSet.getString("bookname");
             author = resultSet.getString("author");
             borrowedFee = resultSet.getFloat("borrowedFee");
             copiesOwned = resultSet.getInt("copiesOwned");
         }
+    }
+    public static String getBookNameByID(int bookID) throws SQLException {
+        String sqlString = "select bookname from book where id = "+ bookID ;
+        ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
+        String bookName = null;
+        while (resultSet.next()) {
+           bookName = resultSet.getString("bookname");
+        }
+        return  bookName;
     }
 }

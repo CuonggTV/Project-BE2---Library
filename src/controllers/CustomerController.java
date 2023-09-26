@@ -1,9 +1,7 @@
 package controllers;
 
 import config.Mysql;
-import models.Category;
-import models.Customer;
-import models.Loan;
+import models.*;
 import services.CustomerServices;
 import trigger.BookTrigger;
 import utils.OperationHelper;
@@ -12,6 +10,7 @@ import views.CustomerView;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,41 +56,77 @@ public class CustomerController {
     }
 
     public void payFine(int id) throws SQLException {
-        view.showOwnFine(id);
+        FineList fineList = new FineList();
+        fineList.getFineList(id);
+        if (fineList.isEmpty()) {
+            System.out.println("You don't have any fine.");
+            return;
+        }
+        fineList.showList();
         String[] choice = view.inputChoice("Enter your loanID to pay: ");
-        if(OperationHelper.isArrayOfInteger(choice)){
-                for(int i =0;i<choice.length;i++){
-                    int loanID = Integer.parseInt(choice[0]);
-                    if(CustomerServices.checkFine(loanID)) {
-                        if(!services.subtractBalance(id,services.getFineAmount(id,loanID))){
-                            System.out.println("Your account does not have enough money.");
-                            return;
-                        }
-                        if(services.deleteFine(id,loanID)){
-                            System.out.println("Fine with loanID("+ loanID +") has been paid!");
-                        }
-                        else System.out.println("Fine with loanID("+ loanID +") does not exist!");
-
+        for (int i = 0; i < choice.length; i++) {
+            int loanID = Integer.parseInt(choice[0]);
+            //Check có trong fine của mình ko
+            boolean inList = false;
+            for (int j = 0; j < fineList.size(); j++) {
+                if (loanID == fineList.get(j).getLoanID()) {
+                    inList = true;
+                    //Phải trả loan trước
+                    if(Loan.checkLoan(loanID)){
+                        System.out.println(
+                                "Return book \"" + Book.getBookNameByID(Loan.getBookID_By_LoanID(loanID)) +
+                                " with loanID(" +loanID +") first!"
+                        );
+                        break;
+                    }
+                    if (!services.subtractBalance(id, services.getFineAmount(id, loanID))) {
+                        System.out.println("Your account does not have enough money.");
+                        return;
+                    }
+                    if (services.deleteFine(id, loanID)) {
+                        System.out.println("Fine with loanID(" + loanID + ") has been paid!");
+                        fineList.remove(j);
+                        break;
                     }
                 }
             }
-
+            if (!inList) System.out.println("Fine with loanID(" + loanID + ") does not exist!");
+        }
     }
 
     public void payLoan(int id) throws SQLException {
-        view.showBorrowedBooks(id);
+        LoanList loanList = new LoanList();
+        loanList.getLoanList(id);
+
+        if(loanList.isEmpty()) {
+            System.out.println("You don't have any loan.");
+            return;
+        }
+        loanList.showList();
         String[] choice = view.inputChoice("Enter your loanID to return book: ");
-        if(OperationHelper.isArrayOfInteger(choice)){
-                for(int i =0;i<choice.length;i++){
-                    int loanID = Integer.parseInt(choice[0]);
-                    Loan loan = new Loan();
-                    loan.setLoanByID(loanID);
-                    if(loan.getId() != 0) {
-                        services.disableLoan(loan.getCustomerID(),loanID);
-                        BookTrigger.payLoanTrigger(loan.getBookID());
-                        System.out.println("LoanID: "+ loanID +" has been paid!");
-                    }
+        if(choice[0].equals("none")) return;
+        for (String s : choice) {
+            int loanID;
+            try {
+                loanID = Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                System.out.println("Choice " + s + " must be numeric!");
+                continue;
+            }
+            //Check có trong fine của mình ko
+            boolean inList = false;
+            for (int j = 0; j < loanList.size(); j++) {
+                if (loanID == loanList.get(j).getId()) {
+                    inList = true;
+                    services.disableLoan(loanList.get(j).getCustomerID(), loanID);
+                    BookTrigger.payLoanTrigger(loanList.get(j).getBookID());
+                    System.out.println("LoanID: " + loanID + " has been paid!");
+                    loanList.remove(j);
+                    break;
                 }
+            }
+            if (!inList) System.out.println("LoanID: " + loanID + " is not in your loan.");
+
 
         }
     }
@@ -138,6 +173,11 @@ public class CustomerController {
 
 
     public void borrowBook(int id) throws SQLException {
+        if(Fine.checkFine(id)){
+            System.out.println("You have a fine. Please  pay it first.");
+            return;
+        }
+
         List<String> categories = new ArrayList<>();
         Category.getCategories(categories);
         view.showCategories(categories);
@@ -179,7 +219,6 @@ public class CustomerController {
                     services.updatePhoneNumber(id,view.inputPhoneNumber());
                 }
                 case 4-> {
-                    //view.showBalace(id)
                     services.addBalance(id, OperationHelper.inputFloat("Input your balance: "));
                     System.out.println("Add successful.");
 

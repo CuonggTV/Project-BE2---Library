@@ -155,7 +155,7 @@ public class CustomerView implements IView{
     public void showBookByCategories(String sqlString) throws SQLException {
         ResultSet resultSet = Mysql.statement.executeQuery(sqlString);
 
-        System.out.println("-----------------------------------------------------------------\n");
+        System.out.println("-----------------------------------------------------------------");
         while(resultSet.next()){
             System.out.print(resultSet.getString("ID") +". ");
             System.out.println("\"" +resultSet.getString("bookName") +"\""+ " written by " + "resultSet.getString(\"bookName\")" );
